@@ -1,33 +1,20 @@
 import React, { useState } from 'react';
 import { User, MapPin, Settings, ChevronDown, ChevronRight } from 'lucide-react';
 import PersonalCenter from './PersonalCenter';
+import { demoFootprints, demoUser } from '../mocks/demoData';
 
 const UserProfile = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [expandedFootprint, setExpandedFootprint] = useState(false);
   const [showPersonalCenter, setShowPersonalCenter] = useState(false);
 
-  const userInfo = {
-    name: '王同学',
-    school: '中南大学',
-    avatar: 'https://loremflickr.com/32/32/people?random=1'
-  };
-
-  // 模拟打卡足迹数据
-  const footprintData = [
-    { name: '堕子王烧烤', date: '2024-03-10' },
-    { name: '中南大学鱼粉王', date: '2024-03-08' },
-    { name: '麓山南路臭豆腐', date: '2024-03-05' },
-    { name: '岳麓山脚剁椒鱼头', date: '2024-03-01' }
-  ];
-
   const menuItems = [
     { 
       icon: MapPin, 
       label: '打卡足迹', 
-      count: footprintData.length,
+      count: demoFootprints.length,
       hasSubmenu: true,
-      submenu: footprintData
+      submenu: demoFootprints
     },
     { icon: Settings, label: '设置', count: null }
   ];
@@ -46,21 +33,19 @@ const UserProfile = () => {
             onClick={() => setIsOpen(!isOpen)}
             className="flex items-center space-x-2 bg-white/90 backdrop-blur-md rounded-full px-4 py-2 shadow-lg border border-white/20 hover:shadow-xl transition-all duration-300"
           >
-            <img
-              src={userInfo.avatar}
-              alt="用户头像"
-              className="w-8 h-8 rounded-full mx-auto object-cover"
-            />
+            <div className="w-8 h-8 rounded-full bg-orange-500 text-white flex items-center justify-center text-sm font-bold">
+              {demoUser.name.charAt(0)}
+            </div>
             <div className="hidden md:block text-left">
               <div className="flex items-center space-x-2">
                 <span className="text-sm font-medium text-gray-700">
-                  {userInfo.name}
+                  {demoUser.name}
                 </span>
                 <span className="px-2 py-0.5 bg-blue-100 text-blue-600 text-xs rounded-full">
-                  学生认证
+                  演示认证
                 </span>
               </div>
-              <p className="text-xs text-gray-500">{userInfo.school}</p>
+              <p className="text-xs text-gray-500">{demoUser.school}</p>
             </div>
             <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
           </button>
@@ -71,19 +56,17 @@ const UserProfile = () => {
               {/* 用户信息 */}
               <div className="p-4 bg-gradient-to-r from-orange-50 to-yellow-50 border-b border-gray-200">
                 <div className="flex items-center space-x-3">
-                  <img
-                    src={userInfo.avatar}
-                    alt="用户头像"
-                    className="w-12 h-12 rounded-full mx-auto object-cover"
-                  />
+                  <div className="w-12 h-12 rounded-full bg-orange-500 text-white flex items-center justify-center font-bold">
+                    {demoUser.name.charAt(0)}
+                  </div>
                   <div>
                     <div className="flex items-center space-x-2">
-                      <h3 className="font-semibold text-gray-800">{userInfo.name}</h3>
+                      <h3 className="font-semibold text-gray-800">{demoUser.name}</h3>
                       <span className="px-2 py-0.5 bg-blue-100 text-blue-600 text-xs rounded-full">
-                        学生认证
+                        演示认证
                       </span>
                     </div>
-                    <p className="text-sm text-gray-600">{userInfo.school}</p>
+                    <p className="text-sm text-gray-600">{demoUser.school}</p>
                   </div>
                 </div>
               </div>

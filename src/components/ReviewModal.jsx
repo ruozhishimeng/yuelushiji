@@ -1,69 +1,12 @@
 import React, { useState } from 'react';
-import { X, Star, Filter, ThumbsUp, Camera, AlertTriangle } from 'lucide-react';
+import { X, Star, ThumbsUp, Camera, AlertTriangle } from 'lucide-react';
 
 const ReviewModal = ({ restaurant, isOpen, onClose }) => {
   const [activeFilter, setActiveFilter] = useState('all');
 
   if (!isOpen || !restaurant) return null;
 
-  // 模拟评价数据
-  const reviews = [
-    {
-      id: 1,
-      author: '湖大某同学',
-      avatar: 'https://loremflickr.com/40/40/people?random=1',
-      rating: 5,
-      comment: '分量很足，剁椒鱼头绝了！鱼肉鲜嫩，汤汁浓郁，配菜也很丰富。环境不错，服务态度也很好，性价比超高！',
-      date: '2024-03-10',
-      images: ['https://loremflickr.com/100/100/food?random=1'],
-      likes: 12,
-      type: 'positive'
-    },
-    {
-      id: 2,
-      author: '中南小王',
-      avatar: 'https://loremflickr.com/40/40/people?random=2',
-      rating: 4,
-      comment: '味道不错，就是人太多了要等位。建议错峰去，不然真的要等很久。老板人很好，会主动推荐招牌菜。',
-      date: '2024-03-08',
-      images: [],
-      likes: 8,
-      type: 'positive'
-    },
-    {
-      id: 3,
-      author: '师大小李',
-      avatar: 'https://loremflickr.com/40/40/people?random=3',
-      rating: 3,
-      comment: '一般般吧，没有想象中那么好吃。价格倒是挺实惠的，就是味道普通，可能不会再去了。',
-      date: '2024-03-05',
-      images: [],
-      likes: 3,
-      type: 'neutral'
-    },
-    {
-      id: 4,
-      author: '湖大老张',
-      avatar: 'https://loremflickr.com/40/40/people?random=4',
-      rating: 2,
-      comment: '避雷！服务态度很差，菜品也不新鲜。等了半个多小时才上菜，结果味道还不如食堂。不推荐！',
-      date: '2024-03-01',
-      images: [],
-      likes: 15,
-      type: 'negative'
-    },
-    {
-      id: 5,
-      author: '中南学姐',
-      avatar: 'https://loremflickr.com/40/40/people?random=5',
-      rating: 5,
-      comment: '超级好吃！每次来堕落街都要来这家，老板人也很好，给的料特别足。强烈推荐剁椒鱼头！',
-      date: '2024-02-28',
-      images: ['https://loremflickr.com/100/100/food?random=2'],
-      likes: 20,
-      type: 'positive'
-    }
-  ];
+  const reviews = restaurant.recentReviews || [];
 
   const filterOptions = [
     { key: 'all', label: '全部', icon: null },
@@ -77,7 +20,7 @@ const ReviewModal = ({ restaurant, isOpen, onClose }) => {
       case 'positive':
         return review.rating >= 4;
       case 'withImages':
-        return review.images.length > 0;
+        return review.images?.length > 0;
       case 'negative':
         return review.rating <= 2;
       default:
@@ -105,17 +48,15 @@ const ReviewModal = ({ restaurant, isOpen, onClose }) => {
             <h2 className="text-2xl font-bold text-gray-800">{restaurant.name}</h2>
             <div className="flex items-center space-x-4 mt-2">
               <div className="flex items-center space-x-1">
-                <span className="text-3xl font-bold text-orange-600">{restaurant.rating}</span>
-                <div className="flex items-center space-x-1">
-                  {renderStars(Math.floor(restaurant.rating))}
-                </div>
+                <span className="text-3xl font-bold text-orange-600">{restaurant.rating || '暂无'}</span>
+                {restaurant.rating && (
+                  <div className="flex items-center space-x-1">
+                    {renderStars(Math.floor(restaurant.rating))}
+                  </div>
+                )}
               </div>
               <div className="text-sm text-gray-600">
-                <span>味道: 4.2</span>
-                <span className="mx-2">·</span>
-                <span>环境: 4.0</span>
-                <span className="mx-2">·</span>
-                <span>服务: 4.1</span>
+                <span>真实学生评价待接入</span>
               </div>
             </div>
           </div>
@@ -149,14 +90,12 @@ const ReviewModal = ({ restaurant, isOpen, onClose }) => {
 
         {/* 评价列表 */}
         <div className="overflow-y-auto max-h-[60vh] p-4 space-y-4">
-          {filteredReviews.map((review) => (
+          {filteredReviews.length > 0 ? filteredReviews.map((review) => (
             <div key={review.id} className="border-b border-gray-100 pb-4 last:border-b-0">
               <div className="flex items-start space-x-3">
-                <img
-                  src={review.avatar}
-                  alt={review.author}
-                  className="w-10 h-10 rounded-full mx-auto object-cover"
-                />
+                <div className="w-10 h-10 rounded-full bg-orange-500 flex items-center justify-center text-white font-bold">
+                  {review.author?.charAt(0) || '评'}
+                </div>
                 <div className="flex-1">
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center space-x-2">
@@ -170,7 +109,7 @@ const ReviewModal = ({ restaurant, isOpen, onClose }) => {
                   <p className="text-gray-700 mb-3">{review.comment}</p>
                   
                   {/* 评价图片 */}
-                  {review.images.length > 0 && (
+                  {review.images?.length > 0 && (
                     <div className="flex space-x-2 mb-3">
                       {review.images.map((image, index) => (
                         <img
@@ -193,7 +132,12 @@ const ReviewModal = ({ restaurant, isOpen, onClose }) => {
                 </div>
               </div>
             </div>
-          ))}
+          )) : (
+            <div className="py-12 text-center">
+              <p className="text-gray-500">暂无真实学生评价</p>
+              <p className="text-sm text-gray-400 mt-2">当前仅展示高德商家基础信息，打卡评价接入后会在这里展示。</p>
+            </div>
+          )}
         </div>
       </div>
     </div>

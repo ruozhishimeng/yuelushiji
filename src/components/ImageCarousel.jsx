@@ -1,108 +1,70 @@
-import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ImageOff } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
 
-const ImageCarousel = ({ restaurantName, className = '' }) => {
+const ImageCarousel = ({ restaurantName, images = [], className = '' }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [showPreview, setShowPreview] = useState(false);
+  const validImages = useMemo(
+    () => (Array.isArray(images) ? images.filter(Boolean) : []),
+    [images]
+  );
 
-  // 根据餐厅名称生成不同类型的图片URL
-  const getImageUrl = (index) => {
-    // 根据餐厅名称判断类型
-    if (restaurantName.includes('奶茶') || restaurantName.includes('茶颜')) {
-      return `https://loremflickr.com/400/300/tea?random=${index}`;
-    } else if (restaurantName.includes('烧烤') || restaurantName.includes('剁椒') || restaurantName.includes('麻辣烫')) {
-      return `https://loremflickr.com/400/300/meat?random=${index}`;
-    } else {
-      return `https://loremflickr.com/400/300/rice?random=${index}`;
-    }
+  const handlePrev = (event) => {
+    event.stopPropagation();
+    setCurrentIndex(prev => (prev === 0 ? validImages.length - 1 : prev - 1));
   };
 
-  // 生成3张图片URL
-  const images = [
-    getImageUrl(1),
-    getImageUrl(2),
-    getImageUrl(3)
-  ];
-
-  const goToPrevious = () => {
-    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+  const handleNext = (event) => {
+    event.stopPropagation();
+    setCurrentIndex(prev => (prev === validImages.length - 1 ? 0 : prev + 1));
   };
 
-  const goToNext = () => {
-    setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
-  };
-
-  const handleImageClick = () => {
-    setShowPreview(true);
-  };
+  if (validImages.length === 0) {
+    return (
+      <div className={`h-32 rounded-lg bg-gradient-to-br from-orange-50 to-yellow-50 border border-orange-100 flex flex-col items-center justify-center text-orange-500 ${className}`}>
+        <ImageOff className="w-8 h-8 mb-2" />
+        <span className="text-xs font-medium">暂无真实图片</span>
+      </div>
+    );
+  }
 
   return (
-    <>
-      <div className={`relative ${className}`}>
-        {/* 图片容器 */}
-        <div className="relative overflow-hidden rounded-lg">
-          <img
-            src={images[currentIndex]}
-            alt={`${restaurantName} ${currentIndex + 1}`}
-            className="w-full h-32 mx-auto object-cover cursor-pointer hover:scale-105 transition-transform duration-300"
-            onClick={handleImageClick}
-            style={{ zIndex: 1 }} // 确保图片层级低于下拉菜单
-          />
-          
-          {/* 左右箭头 */}
-          {images.length > 1 && (
-            <>
-              <button
-                onClick={goToPrevious}
-                className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-1 rounded-full hover:bg-black/70 transition-colors"
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-              <button
-                onClick={goToNext}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-1 rounded-full hover:bg-black/70 transition-colors"
-              >
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </>
-          )}
-        </div>
+    <div className={`relative h-32 rounded-lg overflow-hidden bg-gray-100 ${className}`}>
+      <img
+        src={validImages[currentIndex]}
+        alt={restaurantName}
+        className="w-full h-full object-cover"
+        loading="lazy"
+      />
 
-        {/* 指示器 */}
-        {images.length > 1 && (
-          <div className="flex justify-center space-x-1 mt-2">
-            {images.map((_, index) => (
-              <button
+      {validImages.length > 1 && (
+        <>
+          <button
+            type="button"
+            onClick={handlePrev}
+            className="absolute left-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-black/40 text-white flex items-center justify-center hover:bg-black/60"
+            aria-label="上一张"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+          <button
+            type="button"
+            onClick={handleNext}
+            className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-black/40 text-white flex items-center justify-center hover:bg-black/60"
+            aria-label="下一张"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
+          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex space-x-1">
+            {validImages.map((_, index) => (
+              <span
                 key={index}
-                onClick={() => setCurrentIndex(index)}
-                className={`w-2 h-2 rounded-full transition-colors ${
-                  index === currentIndex ? 'bg-orange-500' : 'bg-gray-300'
-                }`}
+                className={`w-1.5 h-1.5 rounded-full ${index === currentIndex ? 'bg-white' : 'bg-white/50'}`}
               />
             ))}
           </div>
-        )}
-      </div>
-
-      {/* 大图预览模态框 */}
-      {showPreview && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-          <div className="relative max-w-4xl max-h-full">
-            <button
-              onClick={() => setShowPreview(false)}
-              className="absolute -top-10 right-0 text-white hover:text-gray-300 transition-colors"
-            >
-              <X className="w-8 h-8" />
-            </button>
-            <img
-              src={images[currentIndex]}
-              alt={`${restaurantName} 预览`}
-              className="max-w-full max-h-full mx-auto object-contain rounded-lg"
-            />
-          </div>
-        </div>
+        </>
       )}
-    </>
+    </div>
   );
 };
 

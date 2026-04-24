@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { X, Sparkles } from 'lucide-react';
 
 const SpinWheel = ({ restaurants, onResult, onClose }) => {
@@ -7,10 +7,11 @@ const SpinWheel = ({ restaurants, onResult, onClose }) => {
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
   const wheelRef = useRef(null);
 
-  const segmentAngle = 360 / restaurants.length;
+  const hasRestaurants = restaurants.length > 0;
+  const segmentAngle = hasRestaurants ? 360 / restaurants.length : 0;
 
   const handleSpin = () => {
-    if (isSpinning) return;
+    if (isSpinning || !hasRestaurants) return;
 
     setIsSpinning(true);
     
@@ -63,7 +64,7 @@ const SpinWheel = ({ restaurants, onResult, onClose }) => {
               transition: isSpinning ? 'transform 3s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'none'
             }}
           >
-            {restaurants.map((restaurant, index) => {
+            {hasRestaurants ? restaurants.map((restaurant, index) => {
               const angle = index * segmentAngle;
               const nextAngle = (index + 1) * segmentAngle;
               
@@ -95,7 +96,11 @@ const SpinWheel = ({ restaurants, onResult, onClose }) => {
                   </div>
                 </div>
               );
-            })}
+            }) : (
+              <div className="w-full h-full flex items-center justify-center text-sm text-orange-600 bg-orange-50">
+                暂无可选商家
+              </div>
+            )}
           </div>
           
           {/* 指针 */}
@@ -109,9 +114,9 @@ const SpinWheel = ({ restaurants, onResult, onClose }) => {
           {!selectedRestaurant ? (
             <button
               onClick={handleSpin}
-              disabled={isSpinning}
+              disabled={isSpinning || !hasRestaurants}
               className={`px-8 py-3 rounded-xl font-semibold text-white transition-all duration-300 ${
-                isSpinning
+                isSpinning || !hasRestaurants
                   ? 'bg-gray-400 cursor-not-allowed'
                   : 'bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 transform hover:scale-105 shadow-lg'
               }`}

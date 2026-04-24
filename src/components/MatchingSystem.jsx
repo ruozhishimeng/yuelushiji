@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { X, Users, Utensils, Coffee, IceCream, Search, MessageCircle, UserPlus, Compass, MapPin } from 'lucide-react';
+import React, { useState } from 'react';
+import { X, Users, Utensils, Search, MessageCircle, UserPlus, Compass, MapPin } from 'lucide-react';
+import { demoMatchedUsers } from '../mocks/demoData';
 
 const MatchingSystem = ({ isOpen, onClose, targetRestaurant = null }) => {
-  const [currentStep, setCurrentStep] = useState('preferences'); // 'preferences', 'matching', 'result'
+  const [currentStep, setCurrentStep] = useState('preferences');
   const [preferences, setPreferences] = useState({
     people: '2人',
     tastes: [],
@@ -13,46 +14,23 @@ const MatchingSystem = ({ isOpen, onClose, targetRestaurant = null }) => {
 
   const peopleOptions = ['2人', '4人', '不限'];
   const tasteOptions = [
-    { key: 'spicy', label: '辣', icon: '🌶️' },
-    { key: 'mild', label: '清淡', icon: '🥗' },
-    { key: 'dessert', label: '甜点', icon: '🍰' },
-    { key: 'drink', label: '饮品', icon: '🥤' }
+    { key: 'spicy', label: '辣', icon: '辣' },
+    { key: 'mild', label: '清淡', icon: '淡' },
+    { key: 'dessert', label: '甜点', icon: '甜' },
+    { key: 'drink', label: '饮品', icon: '饮' }
   ];
-  
-  // 更新核心诉求选项
+
   const purposeOptions = [
     { key: 'chat', label: '聊天交友', icon: MessageCircle, desc: '边吃边聊，扩展校友圈' },
     { key: 'explore', label: '组队探店', icon: Compass, desc: '新店打卡，分担排队压力' },
     { key: 'group', label: '大餐拼饭', icon: Utensils, desc: 'AA制吃大餐，拼单战友' }
   ];
 
-  // 模拟匹配到的用户数据
-  const mockMatchedUsers = [
-    {
-      id: 1,
-      name: '王同学',
-      school: '湖南大学',
-      avatar: 'https://loremflickr.com/60/60/people?random=1',
-      commonGoal: targetRestaurant ? `也想吃${targetRestaurant.name}` : '堕落街烧烤',
-      matchRate: 98,
-      tags: ['不吃辣', 'E人']
-    },
-    {
-      id: 2,
-      name: '李同学',
-      school: '中南大学',
-      avatar: 'https://loremflickr.com/60/60/people?random=2',
-      commonGoal: targetRestaurant ? `对${targetRestaurant.name}感兴趣` : '堕落街烧烤',
-      matchRate: 92,
-      tags: ['嗜辣如命', '社恐']
-    }
-  ];
-
   const handleTasteToggle = (taste) => {
     setPreferences(prev => ({
       ...prev,
       tastes: prev.tastes.includes(taste)
-        ? prev.tastes.filter(t => t !== taste)
+        ? prev.tastes.filter(item => item !== taste)
         : [...prev.tastes, taste]
     }));
   };
@@ -60,13 +38,12 @@ const MatchingSystem = ({ isOpen, onClose, targetRestaurant = null }) => {
   const handleStartMatching = () => {
     setCurrentStep('matching');
     setIsMatching(true);
-    
-    // 模拟匹配过程
+
     setTimeout(() => {
-      setMatchedUsers(mockMatchedUsers);
+      setMatchedUsers(demoMatchedUsers);
       setIsMatching(false);
       setCurrentStep('result');
-    }, 3000);
+    }, 1200);
   };
 
   const handleReset = () => {
@@ -84,20 +61,21 @@ const MatchingSystem = ({ isOpen, onClose, targetRestaurant = null }) => {
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div className="bg-white/95 backdrop-blur-md rounded-3xl max-w-md w-full max-h-[90vh] overflow-hidden shadow-2xl">
-        {/* 头部 */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-orange-600 rounded-full flex items-center justify-center">
               <Users className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-gray-800">搭一搭</h2>
-              {/* 动态标题逻辑 */}
+              <div className="flex items-center space-x-2">
+                <h2 className="text-xl font-bold text-gray-800">搭一搭</h2>
+                <span className="px-2 py-0.5 bg-gray-100 text-gray-500 text-xs rounded-full">演示功能</span>
+              </div>
               <div className="flex items-center space-x-1">
                 <MapPin className="w-3 h-3 text-gray-500" />
                 <p className="text-sm text-gray-600">
-                  {targetRestaurant 
-                    ? `寻找${targetRestaurant.name}的饭搭子` 
+                  {targetRestaurant
+                    ? `寻找${targetRestaurant.name}的饭搭子`
                     : '寻找周边的饭搭子'
                   }
                 </p>
@@ -112,7 +90,6 @@ const MatchingSystem = ({ isOpen, onClose, targetRestaurant = null }) => {
           </button>
         </div>
 
-        {/* 内容区域 */}
         <div className="p-6 overflow-y-auto max-h-[70vh]">
           {currentStep === 'preferences' && (
             <div className="space-y-6">
@@ -148,7 +125,7 @@ const MatchingSystem = ({ isOpen, onClose, targetRestaurant = null }) => {
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                       }`}
                     >
-                      <span className="text-lg">{option.icon}</span>
+                      <span className="text-sm font-semibold">{option.icon}</span>
                       <span>{option.label}</span>
                     </button>
                   ))}
@@ -156,7 +133,6 @@ const MatchingSystem = ({ isOpen, onClose, targetRestaurant = null }) => {
               </div>
 
               <div>
-                {/* 文案修改：核心诉求 -> 我想找... */}
                 <h3 className="text-lg font-semibold text-gray-800 mb-3">我想找...</h3>
                 <div className="space-y-3">
                   {purposeOptions.map(option => (
@@ -189,7 +165,7 @@ const MatchingSystem = ({ isOpen, onClose, targetRestaurant = null }) => {
                 onClick={handleStartMatching}
                 className="w-full py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-2xl font-semibold hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg"
               >
-                开始匹配
+                开始演示匹配
               </button>
             </div>
           )}
@@ -205,12 +181,12 @@ const MatchingSystem = ({ isOpen, onClose, targetRestaurant = null }) => {
                 </div>
               </div>
               <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                {isMatching ? '正在搜寻中...' : '匹配成功！'}
+                {isMatching ? '正在演示匹配...' : '匹配成功！'}
               </h3>
               <p className="text-gray-600">
-                {targetRestaurant 
+                {targetRestaurant
                   ? `正在为你寻找同样想吃${targetRestaurant.name}的饭搭子`
-                  : '正在岳麓大学城搜索志同道合的人'
+                  : '真实匹配服务待接入，当前使用演示数据'
                 }
               </p>
             </div>
@@ -219,18 +195,16 @@ const MatchingSystem = ({ isOpen, onClose, targetRestaurant = null }) => {
           {currentStep === 'result' && (
             <div className="space-y-4">
               <div className="text-center mb-6">
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">匹配成功！</h3>
-                <p className="text-gray-600">为你找到了 {matchedUsers.length} 个饭搭子</p>
+                <h3 className="text-xl font-semibold text-gray-800 mb-2">演示匹配成功</h3>
+                <p className="text-gray-600">为你展示了 {matchedUsers.length} 个演示饭搭子</p>
               </div>
 
               {matchedUsers.map(user => (
                 <div key={user.id} className="bg-gray-50 rounded-2xl p-4 animate-slide-up">
                   <div className="flex items-center space-x-4">
-                    <img
-                      src={user.avatar}
-                      alt={user.name}
-                      className="w-12 h-12 rounded-full mx-auto object-cover"
-                    />
+                    <div className="w-12 h-12 rounded-full bg-orange-500 text-white flex items-center justify-center font-bold">
+                      {user.name.charAt(0)}
+                    </div>
                     <div className="flex-1">
                       <div className="flex items-center space-x-2 mb-1">
                         <h4 className="font-semibold text-gray-800">{user.name}</h4>
@@ -240,7 +214,9 @@ const MatchingSystem = ({ isOpen, onClose, targetRestaurant = null }) => {
                           {user.matchRate}%匹配
                         </span>
                       </div>
-                      <p className="text-sm text-gray-600 mb-1">{user.commonGoal}</p>
+                      <p className="text-sm text-gray-600 mb-1">
+                        {targetRestaurant ? `也想吃${targetRestaurant.name}` : '演示共同目标'}
+                      </p>
                       <div className="flex space-x-1">
                         {user.tags.map((tag, index) => (
                           <span key={index} className="text-xs bg-orange-100 text-orange-600 px-2 py-0.5 rounded-full">

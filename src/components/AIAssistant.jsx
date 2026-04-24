@@ -1,39 +1,32 @@
-import { Mic, X, Volume2, ChevronUp, ChevronDown, Utensils, Users } from 'lucide-react';
+import { Mic, X, Utensils, Users } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+
+const DEMO_TRANSCRIPT = '正在解析你的美食需求...';
+const DEMO_RECOMMENDATIONS = [];
+
 const AIAssistant = ({ isOpen, onClose, onRestaurantSelect, onMatchingOpen }) => {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [showResult, setShowResult] = useState(false);
   const [expanded, setExpanded] = useState(false);
-  const [activeTab, setActiveTab] = useState('food'); // 'food' or 'matching'
-
-  const mockTranscript = '正在寻找天马附近评分最高的湘菜...';
-  
-  // 模拟推荐店铺数据
-  const recommendedRestaurants = [
-    {
-      id: 1,
-      name: '岳麓山脚剁椒鱼头',
-      rating: 4.8,
-      comment: '鱼头超大！剁椒很香，配菜也很丰富'
-    },
-    {
-      id: 2,
-      name: '中南大学鱼粉王',
-      rating: 4.7,
-      comment: '鱼肉超多！汤特别鲜，强烈推荐'
-    }
-  ];
+  const [activeTab, setActiveTab] = useState('food');
 
   useEffect(() => {
-    if (isListening) {
-      const timer = setTimeout(() => {
-        setTranscript(mockTranscript);
-        setIsListening(false);
-        setShowResult(true);
-      }, 3000);
-      return () => clearTimeout(timer);
+    if (isOpen) {
+      setExpanded(true);
     }
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isListening) return undefined;
+
+    const timer = setTimeout(() => {
+      setTranscript(DEMO_TRANSCRIPT);
+      setIsListening(false);
+      setShowResult(true);
+    }, 3000);
+
+    return () => clearTimeout(timer);
   }, [isListening]);
 
   const handleStartListening = () => {
@@ -57,19 +50,20 @@ const AIAssistant = ({ isOpen, onClose, onRestaurantSelect, onMatchingOpen }) =>
   };
 
   const handleMatchingClick = () => {
-    // 传递null表示没有特定目标餐厅
     onMatchingOpen(null);
     handleClose();
   };
 
   if (!isOpen) return null;
 
+  const isExpanded = expanded || isOpen;
+
   return (
-    <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50">
+    <div className="fixed bottom-28 left-1/2 z-50 w-[calc(100vw-32px)] max-w-96 -translate-x-1/2">
       <div className={`bg-white rounded-3xl shadow-xl transition-all duration-500 ease-in-out overflow-hidden ${
-        expanded ? 'w-96 h-auto p-4' : 'w-16 h-16'
+        isExpanded ? 'w-full h-auto p-4' : 'mx-auto h-16 w-16'
       }`}>
-        {!expanded ? (
+        {!isExpanded ? (
           <button
             onClick={() => setExpanded(true)}
             className="w-full h-full flex items-center justify-center bg-white rounded-3xl hover:bg-gray-50 transition-colors"
@@ -79,7 +73,10 @@ const AIAssistant = ({ isOpen, onClose, onRestaurantSelect, onMatchingOpen }) =>
         ) : (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="font-semibold text-gray-800">AI 语音助手</h3>
+              <div className="flex items-center space-x-2">
+                <h3 className="font-semibold text-gray-800">AI 语音助手</h3>
+                <span className="px-2 py-0.5 bg-gray-100 text-gray-500 text-xs rounded-full">演示功能</span>
+              </div>
               <button
                 onClick={handleClose}
                 className="p-1 hover:bg-gray-100 rounded-full transition-colors"
@@ -88,7 +85,6 @@ const AIAssistant = ({ isOpen, onClose, onRestaurantSelect, onMatchingOpen }) =>
               </button>
             </div>
 
-            {/* 标签切换 */}
             <div className="flex bg-gray-100 rounded-xl p-1">
               <button
                 onClick={() => setActiveTab('food')}
@@ -116,7 +112,6 @@ const AIAssistant = ({ isOpen, onClose, onRestaurantSelect, onMatchingOpen }) =>
 
             {activeTab === 'food' && (
               <>
-                {/* 声波动画 */}
                 {isListening && (
                   <div className="flex items-center justify-center">
                     <div className="flex items-center space-x-1">
@@ -135,7 +130,6 @@ const AIAssistant = ({ isOpen, onClose, onRestaurantSelect, onMatchingOpen }) =>
                   </div>
                 )}
 
-                {/* 状态显示 */}
                 <div className="text-center">
                   {isListening ? (
                     <div className="space-y-2">
@@ -152,53 +146,50 @@ const AIAssistant = ({ isOpen, onClose, onRestaurantSelect, onMatchingOpen }) =>
                         <p className="text-sm text-orange-600 font-medium mb-1">识别结果：</p>
                         <p className="text-gray-800 text-sm">{transcript}</p>
                       </div>
-                      
-                      {/* 推荐店铺横向滑动 */}
+
                       <div className="space-y-2">
                         <p className="text-sm font-medium text-gray-700">为您推荐：</p>
-                        <div className="flex space-x-3 overflow-x-auto pb-2">
-                          {recommendedRestaurants.map((restaurant) => (
-                            <div 
-                              key={restaurant.id} 
-                              className="flex-shrink-0 w-48 p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer hover:bg-orange-50 transition-colors"
-                              onClick={() => handleRestaurantClick(restaurant)}
-                            >
-                              <div className="flex items-center justify-between mb-1">
-                                <h4 className="font-medium text-gray-800 text-sm truncate">{restaurant.name}</h4>
-                                <div className="flex items-center space-x-1">
-                                  <span className="text-yellow-500">★</span>
-                                  <span className="text-xs text-gray-600">{restaurant.rating}</span>
+                        {DEMO_RECOMMENDATIONS.length > 0 ? (
+                          <div className="flex space-x-3 overflow-x-auto pb-2">
+                            {DEMO_RECOMMENDATIONS.map((restaurant) => (
+                              <div
+                                key={restaurant.id}
+                                className="flex-shrink-0 w-48 p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer hover:bg-orange-50 transition-colors"
+                                onClick={() => handleRestaurantClick(restaurant)}
+                              >
+                                <div className="flex items-center justify-between mb-1">
+                                  <h4 className="font-medium text-gray-800 text-sm truncate">{restaurant.name}</h4>
+                                  <div className="flex items-center space-x-1">
+                                    <span className="text-yellow-500">★</span>
+                                    <span className="text-xs text-gray-600">{restaurant.rating}</span>
+                                  </div>
                                 </div>
+                                <p className="text-xs text-gray-600">{restaurant.comment}</p>
                               </div>
-                              <p className="text-xs text-gray-600">{restaurant.comment}</p>
-                            </div>
-                          ))}
-                        </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="p-3 bg-gray-50 rounded-lg border border-gray-200">
+                            <p className="text-sm text-gray-600">AI 推荐暂未接入真实商家数据，请先使用左侧搜索和地图商家。</p>
+                          </div>
+                        )}
                       </div>
                     </div>
                   ) : (
                     <div className="space-y-2">
-                      <p className="text-sm font-medium text-gray-700">🎧 正在倾听您的需求...</p>
+                      <p className="text-sm font-medium text-gray-700">正在倾听您的需求...</p>
                       <div className="space-y-2">
                         <div className="p-2 bg-gray-50 rounded-lg">
                           <p className="text-xs text-gray-600">试试说："帮我找找天马附近评分最高的湘菜"</p>
                         </div>
-                        <div className="flex space-x-2">
-                          <div className="flex-1 p-2 bg-orange-50 rounded-lg">
-                            <p className="text-xs font-medium text-orange-700">岳麓山脚剁椒鱼头</p>
-                            <p className="text-xs text-gray-600">评分 4.8</p>
-                          </div>
-                          <div className="flex-1 p-2 bg-orange-50 rounded-lg">
-                            <p className="text-xs font-medium text-orange-700">中南大学鱼粉王</p>
-                            <p className="text-xs text-gray-600">评分 4.7</p>
-                          </div>
+                        <div className="p-2 bg-orange-50 rounded-lg">
+                          <p className="text-xs text-orange-700">真实商家数据已由地图搜索加载，AI 推荐后续再接入。</p>
                         </div>
                       </div>
                     </div>
                   )}
                 </div>
 
-                {/* 控制按钮 */}
                 <div className="flex justify-center space-x-3">
                   {!isListening && !showResult && (
                     <button
@@ -209,7 +200,7 @@ const AIAssistant = ({ isOpen, onClose, onRestaurantSelect, onMatchingOpen }) =>
                       <span>开始说话</span>
                     </button>
                   )}
-                  
+
                   {showResult && (
                     <div className="flex space-x-2">
                       <button
@@ -235,9 +226,9 @@ const AIAssistant = ({ isOpen, onClose, onRestaurantSelect, onMatchingOpen }) =>
               <div className="text-center space-y-4">
                 <div className="space-y-2">
                   <p className="text-sm font-medium text-gray-700">寻找志同道合的饭搭子</p>
-                  <p className="text-xs text-gray-500">一起探索岳麓大学城美食</p>
+                  <p className="text-xs text-gray-500">演示入口，真实匹配服务待接入</p>
                 </div>
-                
+
                 <button
                   onClick={handleMatchingClick}
                   className="w-full flex items-center justify-center space-x-2 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all duration-300"

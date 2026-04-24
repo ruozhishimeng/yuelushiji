@@ -8,7 +8,7 @@ const EvaluationModal = ({ restaurant, isOpen, onClose }) => {
     service: 0
   });
   const [comment, setComment] = useState('');
-  const [images, setImages] = useState([]);
+  const [images] = useState([]);
 
   if (!isOpen || !restaurant) return null;
 
@@ -20,15 +20,7 @@ const EvaluationModal = ({ restaurant, isOpen, onClose }) => {
   };
 
   const handleAIGenerate = () => {
-    const aiComments = [
-      `这家店在堕落街真的绝了，人均只要${restaurant.avgPrice}元，口味超地道，学长强烈推荐！`,
-      `${restaurant.name}的招牌菜真的很棒，环境也不错，服务态度很好，性价比超高！`,
-      `和朋友一起来${restaurant.name}，菜品分量很足，味道正宗，下次还会再来！`,
-      `${restaurant.name}的${restaurant.hotDishes?.[0]?.name || '招牌菜'}真的很好吃，强烈推荐给大家！`
-    ];
-    
-    const randomComment = aiComments[Math.floor(Math.random() * aiComments.length)];
-    setComment(randomComment);
+    setComment(`我在${restaurant.name}的真实体验：\n口味：\n环境：\n服务：\n价格/分量：\n是否推荐：`);
   };
 
   const handleSubmit = () => {
@@ -69,11 +61,17 @@ const EvaluationModal = ({ restaurant, isOpen, onClose }) => {
         <div className="overflow-y-auto max-h-[70vh] p-6 space-y-6">
           {/* 餐厅信息 */}
           <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-xl">
-            <img
-              src={`https://loremflickr.com/60/60/restaurant?random=${restaurant.id}`}
-              alt={restaurant.name}
-              className="w-12 h-12 rounded-lg mx-auto object-cover"
-            />
+            {restaurant.photos?.[0] ? (
+              <img
+                src={restaurant.photos[0]}
+                alt={restaurant.name}
+                className="w-12 h-12 rounded-lg mx-auto object-cover"
+              />
+            ) : (
+              <div className="w-12 h-12 rounded-lg bg-orange-50 text-orange-500 flex items-center justify-center">
+                <Camera className="w-5 h-5" />
+              </div>
+            )}
             <div>
               <h3 className="font-semibold text-gray-800">{restaurant.name}</h3>
               <p className="text-sm text-gray-600">{restaurant.location}</p>
@@ -139,7 +137,7 @@ const EvaluationModal = ({ restaurant, isOpen, onClose }) => {
                 onClick={handleAIGenerate}
                 className="absolute bottom-3 right-3 px-3 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs rounded-full hover:from-purple-600 hover:to-pink-600 transition-all duration-300"
               >
-                AI 帮你评价
+                生成模板
               </button>
             </div>
           </div>
