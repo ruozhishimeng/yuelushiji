@@ -20,7 +20,7 @@ const ImageCarousel = ({ restaurantName, images = [], className = '' }) => {
 
   if (validImages.length === 0) {
     return (
-      <div className={`h-32 rounded-lg bg-gradient-to-br from-orange-50 to-yellow-50 border border-orange-100 flex flex-col items-center justify-center text-orange-500 ${className}`}>
+      <div className={`h-32 rounded-lg bg-brand-primarySubtle border border-brand-primarySoft flex flex-col items-center justify-center text-brand-primary ${className}`}>
         <ImageOff className="w-8 h-8 mb-2" />
         <span className="text-xs font-medium">暂无真实图片</span>
       </div>
@@ -41,7 +41,7 @@ const ImageCarousel = ({ restaurantName, images = [], className = '' }) => {
           <button
             type="button"
             onClick={handlePrev}
-            className="absolute left-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-black/40 text-white flex items-center justify-center hover:bg-black/60"
+            className="absolute left-2 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-black/45 text-white hover:bg-black/65 focus:outline-none focus:ring-2 focus:ring-white"
             aria-label="上一张"
           >
             <ChevronLeft className="w-4 h-4" />
@@ -49,7 +49,7 @@ const ImageCarousel = ({ restaurantName, images = [], className = '' }) => {
           <button
             type="button"
             onClick={handleNext}
-            className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-black/40 text-white flex items-center justify-center hover:bg-black/60"
+            className="absolute right-2 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-black/45 text-white hover:bg-black/65 focus:outline-none focus:ring-2 focus:ring-white"
             aria-label="下一张"
           >
             <ChevronRight className="w-4 h-4" />

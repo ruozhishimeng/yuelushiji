@@ -35,8 +35,9 @@ const EvaluationModal = ({ restaurant, isOpen, onClose }) => {
         key={i}
         onClick={() => handleStarClick(category, i + 1)}
         className={`w-8 h-8 ${
-          i < currentRating ? 'text-yellow-500' : 'text-gray-300'
-        } hover:text-yellow-500 transition-colors`}
+          i < currentRating ? 'text-brand-warning' : 'text-gray-300'
+        } hover:text-brand-warning transition-colors focus:outline-none focus:ring-2 focus:ring-brand-warning`}
+        aria-label={`${category} ${i + 1} 星`}
       >
         <Star className="w-full h-full fill-current" />
       </button>
@@ -45,13 +46,14 @@ const EvaluationModal = ({ restaurant, isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[1000] p-4">
-      <div className="bg-white rounded-3xl max-w-md w-full max-h-[90vh] overflow-hidden shadow-2xl">
+      <div className="bg-white rounded-2xl max-w-md w-full max-h-[90vh] overflow-hidden shadow-xl">
         {/* 头部 */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <h2 className="text-2xl font-bold text-gray-800">打卡评价</h2>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            aria-label="关闭打卡评价"
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-brand-primary"
           >
             <X className="w-6 h-6 text-gray-500" />
           </button>
@@ -68,7 +70,7 @@ const EvaluationModal = ({ restaurant, isOpen, onClose }) => {
                 className="w-12 h-12 rounded-lg mx-auto object-cover"
               />
             ) : (
-              <div className="w-12 h-12 rounded-lg bg-orange-50 text-orange-500 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-lg bg-brand-primarySubtle text-brand-primary flex items-center justify-center">
                 <Camera className="w-5 h-5" />
               </div>
             )}
@@ -114,7 +116,7 @@ const EvaluationModal = ({ restaurant, isOpen, onClose }) => {
               {[...Array(3)].map((_, index) => (
                 <div
                   key={index}
-                  className="aspect-square border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-orange-500 transition-colors"
+                  className="aspect-square border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-brand-primary transition-colors"
                 >
                   <Camera className="w-8 h-8 text-gray-400 mb-2" />
                   <span className="text-xs text-gray-500">添加图片</span>
@@ -131,11 +133,11 @@ const EvaluationModal = ({ restaurant, isOpen, onClose }) => {
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
                 placeholder="分享你的用餐体验，帮助其他同学做出选择..."
-                className="w-full h-32 p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none"
+                className="w-full h-32 p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent resize-none"
               />
               <button
                 onClick={handleAIGenerate}
-                className="absolute bottom-3 right-3 px-3 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs rounded-full hover:from-purple-600 hover:to-pink-600 transition-all duration-300"
+                className="absolute bottom-3 right-3 rounded-full bg-brand-info px-3 py-1 text-xs text-white transition-colors duration-200 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-brand-info"
               >
                 生成模板
               </button>
@@ -147,7 +149,7 @@ const EvaluationModal = ({ restaurant, isOpen, onClose }) => {
         <div className="p-6 border-t border-gray-200">
           <button
             onClick={handleSubmit}
-            className="w-full py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl font-semibold hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg"
+            className="w-full py-3 bg-brand-primary text-white rounded-xl font-semibold hover:bg-brand-primaryHover transition-all duration-200 shadow-md focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2"
           >
             发布评价
           </button>

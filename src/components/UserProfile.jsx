@@ -31,9 +31,10 @@ const UserProfile = () => {
           {/* 头像按钮 */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="flex items-center space-x-2 bg-white/90 backdrop-blur-md rounded-full px-4 py-2 shadow-lg border border-white/20 hover:shadow-xl transition-all duration-300"
+            aria-label="打开用户菜单"
+            className="flex items-center space-x-2 bg-white/90 backdrop-blur-md rounded-full px-4 py-2 shadow-md border border-white/20 hover:shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-primary"
           >
-            <div className="w-8 h-8 rounded-full bg-orange-500 text-white flex items-center justify-center text-sm font-bold">
+            <div className="w-8 h-8 rounded-full bg-brand-primary text-white flex items-center justify-center text-sm font-bold">
               {demoUser.name.charAt(0)}
             </div>
             <div className="hidden md:block text-left">
@@ -54,9 +55,9 @@ const UserProfile = () => {
           {isOpen && (
             <div className="absolute right-0 mt-2 w-64 bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 overflow-hidden">
               {/* 用户信息 */}
-              <div className="p-4 bg-gradient-to-r from-orange-50 to-yellow-50 border-b border-gray-200">
+              <div className="p-4 bg-brand-primarySubtle border-b border-gray-200">
                 <div className="flex items-center space-x-3">
-                  <div className="w-12 h-12 rounded-full bg-orange-500 text-white flex items-center justify-center font-bold">
+                  <div className="w-12 h-12 rounded-full bg-brand-primary text-white flex items-center justify-center font-bold">
                     {demoUser.name.charAt(0)}
                   </div>
                   <div>
@@ -75,7 +76,7 @@ const UserProfile = () => {
               <div className="py-2">
                 <button
                   onClick={handlePersonalCenterOpen}
-                  className="w-full flex items-center space-x-3 px-4 py-3 hover:bg-orange-50 transition-colors duration-200 text-left"
+                  className="w-full flex items-center space-x-3 px-4 py-3 hover:bg-brand-primarySubtle transition-colors duration-200 text-left focus:outline-none focus:ring-2 focus:ring-brand-primary"
                 >
                   <User className="w-5 h-5 text-gray-500" />
                   <span className="text-gray-700">个人中心</span>
@@ -85,7 +86,7 @@ const UserProfile = () => {
                   <div key={index}>
                     <button
                       onClick={() => item.hasSubmenu && setExpandedFootprint(!expandedFootprint)}
-                      className="w-full flex items-center justify-between px-4 py-3 hover:bg-orange-50 transition-colors duration-200"
+                      className="w-full flex items-center justify-between px-4 py-3 hover:bg-brand-primarySubtle transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-brand-primary"
                     >
                       <div className="flex items-center space-x-3">
                         <item.icon className="w-5 h-5 text-gray-500" />
@@ -93,7 +94,7 @@ const UserProfile = () => {
                       </div>
                       <div className="flex items-center space-x-2">
                         {item.count && (
-                          <span className="bg-orange-100 text-orange-600 text-xs px-2 py-1 rounded-full">
+                          <span className="bg-brand-primarySoft text-brand-primary text-xs px-2 py-1 rounded-full">
                             {item.count}
                           </span>
                         )}

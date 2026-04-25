@@ -27,6 +27,26 @@ export const formatAveragePrice = (avgPrice) => {
   return avgPrice ? `${avgPrice}元` : '人均待补充';
 };
 
+export const getReviewCount = (restaurant) => {
+  const explicitCount = Number(
+    restaurant.reviewCount ?? restaurant.ratingCount ?? restaurant.commentCount
+  );
+
+  if (Number.isFinite(explicitCount) && explicitCount >= 0) {
+    return Math.floor(explicitCount);
+  }
+
+  if (Array.isArray(restaurant.recentReviews)) {
+    return restaurant.recentReviews.length;
+  }
+
+  return 0;
+};
+
+export const formatReviewCount = (restaurant) => {
+  return `${getReviewCount(restaurant)}条`;
+};
+
 export const getBusyStatus = (restaurant) => {
   if (restaurant.busyStatus === 'unknown' || !restaurant.rating) {
     return { status: 'unknown', text: '实时状态待补充', color: 'text-gray-400' };
@@ -37,7 +57,7 @@ export const getBusyStatus = (restaurant) => {
   }
 
   if (restaurant.rating >= 4.3) {
-    return { status: 'moderate', text: '有少量空位', color: 'text-yellow-500' };
+    return { status: 'moderate', text: '有少量空位', color: 'text-brand-warning' };
   }
 
   return { status: 'quiet', text: '无需排队', color: 'text-green-500' };

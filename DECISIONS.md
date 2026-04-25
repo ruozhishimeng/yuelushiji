@@ -57,3 +57,10 @@
 - 决策：新增 `AGENTS.md`、`PROJECT.md`、`ARCHITECTURE.md`、`WORKSTREAMS.md`、`ROADMAP.md`、`RUNBOOK.md`、`DECISIONS.md`。
 - 影响：每个新 Agent 先读根目录文档，再认领工作流。
 - 后续：每次完成重要任务后更新 `WORKSTREAMS.md` 和必要的决策记录。
+
+## 2026-04-25, 品牌主色避开美团黄橙
+
+- 背景：当前前端大量使用 `orange-*` 和 `yellow-*`，容易与美团/外卖/促销平台形成视觉冲突。
+- 决策：品牌主色定为岳麓青绿 `#0F766E`，黄色只保留为评分、收藏、提醒等语义色。
+- 影响：后续 UI 改造应先建立品牌 token，再替换主链路橙色。
+- 后续：按 `BRAND.md` 和 `UI-REVIEW.md` 执行一次集中视觉重构。

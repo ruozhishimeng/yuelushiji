@@ -22,7 +22,19 @@
     --destructive-foreground: 210 40% 98%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --ring: 173 78% 26%;
+    --brand-primary: 173 78% 26%;
+    --brand-primary-hover: 175 68% 21%;
+    --brand-primary-soft: 167 85% 89%;
+    --brand-primary-subtle: 166 76% 97%;
+    --brand-surface: 0 0% 100%;
+    --brand-ink: 222 47% 11%;
+    --brand-muted: 215 16% 47%;
+    --brand-line: 214 32% 91%;
+    --brand-info: 221 83% 53%;
+    --brand-success: 142 76% 36%;
+    --brand-warning: 32 95% 44%;
+    --brand-danger: 0 72% 51%;
     --radius: 0.5rem;
   }
 
@@ -59,6 +71,15 @@
 }
 
 @layer utilities {
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
   .animate-gradient {
     animation: gradient 3s ease infinite;
   }

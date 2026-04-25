@@ -33,7 +33,7 @@ const ReviewModal = ({ restaurant, isOpen, onClose }) => {
       <Star
         key={i}
         className={`w-4 h-4 ${
-          i < rating ? 'text-yellow-500 fill-current' : 'text-gray-300'
+          i < rating ? 'text-brand-warning fill-current' : 'text-gray-300'
         }`}
       />
     ));
@@ -41,14 +41,14 @@ const ReviewModal = ({ restaurant, isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-2xl">
+      <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-xl">
         {/* 头部 */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <div>
             <h2 className="text-2xl font-bold text-gray-800">{restaurant.name}</h2>
             <div className="flex items-center space-x-4 mt-2">
               <div className="flex items-center space-x-1">
-                <span className="text-3xl font-bold text-orange-600">{restaurant.rating || '暂无'}</span>
+                <span className="text-3xl font-bold text-brand-primary">{restaurant.rating || '暂无'}</span>
                 {restaurant.rating && (
                   <div className="flex items-center space-x-1">
                     {renderStars(Math.floor(restaurant.rating))}
@@ -62,7 +62,8 @@ const ReviewModal = ({ restaurant, isOpen, onClose }) => {
           </div>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            aria-label="关闭评价列表"
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-brand-primary"
           >
             <X className="w-6 h-6 text-gray-500" />
           </button>
@@ -77,7 +78,7 @@ const ReviewModal = ({ restaurant, isOpen, onClose }) => {
                 onClick={() => setActiveFilter(option.key)}
                 className={`flex items-center space-x-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                   activeFilter === option.key
-                    ? 'bg-orange-500 text-white'
+                    ? 'bg-brand-primary text-white'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
@@ -93,7 +94,7 @@ const ReviewModal = ({ restaurant, isOpen, onClose }) => {
           {filteredReviews.length > 0 ? filteredReviews.map((review) => (
             <div key={review.id} className="border-b border-gray-100 pb-4 last:border-b-0">
               <div className="flex items-start space-x-3">
-                <div className="w-10 h-10 rounded-full bg-orange-500 flex items-center justify-center text-white font-bold">
+                <div className="w-10 h-10 rounded-full bg-brand-primary flex items-center justify-center text-white font-bold">
                   {review.author?.charAt(0) || '评'}
                 </div>
                 <div className="flex-1">
@@ -124,7 +125,7 @@ const ReviewModal = ({ restaurant, isOpen, onClose }) => {
                   
                   {/* 点赞 */}
                   <div className="flex items-center space-x-2">
-                    <button className="flex items-center space-x-1 text-gray-500 hover:text-orange-500 transition-colors">
+                    <button className="flex items-center space-x-1 text-gray-500 hover:text-brand-primary transition-colors focus:outline-none focus:ring-2 focus:ring-brand-primary">
                       <ThumbsUp className="w-4 h-4" />
                       <span className="text-sm">{review.likes}</span>
                     </button>
@@ -135,7 +136,7 @@ const ReviewModal = ({ restaurant, isOpen, onClose }) => {
           )) : (
             <div className="py-12 text-center">
               <p className="text-gray-500">暂无真实学生评价</p>
-              <p className="text-sm text-gray-400 mt-2">当前仅展示高德商家基础信息，打卡评价接入后会在这里展示。</p>
+              <p className="text-sm text-gray-400 mt-2">当前仅展示商家基础信息，打卡评价接入后会在这里展示。</p>
             </div>
           )}
         </div>

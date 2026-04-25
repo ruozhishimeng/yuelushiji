@@ -47,6 +47,24 @@ const getCategoryFromPoi = (poi) => {
   return '午饭';
 };
 
+const getReviewCountFromPoi = (poi) => {
+  const candidates = [
+    poi.biz_ext?.review_count,
+    poi.biz_ext?.comment_count,
+    poi.biz_ext?.comment_num,
+    poi.review_count,
+    poi.comment_count,
+    poi.comment_num
+  ];
+
+  for (const candidate of candidates) {
+    const count = Number.parseInt(candidate, 10);
+    if (Number.isFinite(count) && count >= 0) return count;
+  }
+
+  return null;
+};
+
 export const normalizePoi = (poi, AMap, center) => {
   const coordinates = getPoiLocation(poi);
   if (!coordinates || !poi.name) return null;
@@ -61,6 +79,7 @@ export const normalizePoi = (poi, AMap, center) => {
   const photos = Array.isArray(poi.photos)
     ? poi.photos.map(photo => photo.url).filter(Boolean)
     : [];
+  const reviewCount = getReviewCountFromPoi(poi);
 
   return {
     id: poi.id || `${poi.name}-${coordinates.join(',')}`,
@@ -69,6 +88,7 @@ export const normalizePoi = (poi, AMap, center) => {
     name: poi.name,
     coordinates,
     rating: Number.isFinite(rating) ? rating : null,
+    reviewCount,
     avgPrice: avgPrice || null,
     priceLevel: getPriceLevel(avgPrice),
     distance: getDistance(AMap, center, coordinates, poi.distance),

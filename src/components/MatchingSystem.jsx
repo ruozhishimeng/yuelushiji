@@ -60,10 +60,10 @@ const MatchingSystem = ({ isOpen, onClose, targetRestaurant = null }) => {
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white/95 backdrop-blur-md rounded-3xl max-w-md w-full max-h-[90vh] overflow-hidden shadow-2xl">
+      <div className="bg-white/95 backdrop-blur-md rounded-2xl max-w-md w-full max-h-[90vh] overflow-hidden shadow-xl">
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-orange-600 rounded-full flex items-center justify-center">
+            <div className="w-10 h-10 bg-brand-primary rounded-full flex items-center justify-center">
               <Users className="w-5 h-5 text-white" />
             </div>
             <div>
@@ -84,7 +84,8 @@ const MatchingSystem = ({ isOpen, onClose, targetRestaurant = null }) => {
           </div>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            aria-label="关闭饭搭子匹配"
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-brand-primary"
           >
             <X className="w-5 h-5 text-gray-500" />
           </button>
@@ -102,7 +103,7 @@ const MatchingSystem = ({ isOpen, onClose, targetRestaurant = null }) => {
                       onClick={() => setPreferences(prev => ({ ...prev, people: option }))}
                       className={`flex-1 py-3 px-4 rounded-2xl font-medium transition-all duration-300 ${
                         preferences.people === option
-                          ? 'bg-orange-500 text-white shadow-lg'
+                          ? 'bg-brand-primary text-white shadow-md'
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                       }`}
                     >
@@ -121,7 +122,7 @@ const MatchingSystem = ({ isOpen, onClose, targetRestaurant = null }) => {
                       onClick={() => handleTasteToggle(option.key)}
                       className={`flex items-center space-x-2 py-3 px-4 rounded-2xl font-medium transition-all duration-300 ${
                         preferences.tastes.includes(option.key)
-                          ? 'bg-orange-500 text-white shadow-lg'
+                          ? 'bg-brand-primary text-white shadow-md'
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                       }`}
                     >
@@ -141,7 +142,7 @@ const MatchingSystem = ({ isOpen, onClose, targetRestaurant = null }) => {
                       onClick={() => setPreferences(prev => ({ ...prev, purpose: option.label }))}
                       className={`w-full py-4 px-4 rounded-2xl font-medium text-left transition-all duration-300 ${
                         preferences.purpose === option.label
-                          ? 'bg-orange-500 text-white shadow-lg'
+                          ? 'bg-brand-primary text-white shadow-md'
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                       }`}
                     >
@@ -150,7 +151,7 @@ const MatchingSystem = ({ isOpen, onClose, targetRestaurant = null }) => {
                         <div>
                           <div className="font-medium">{option.label}</div>
                           <div className={`text-sm ${
-                            preferences.purpose === option.label ? 'text-orange-100' : 'text-gray-500'
+                            preferences.purpose === option.label ? 'text-teal-50' : 'text-gray-500'
                           }`}>
                             {option.desc}
                           </div>
@@ -163,7 +164,7 @@ const MatchingSystem = ({ isOpen, onClose, targetRestaurant = null }) => {
 
               <button
                 onClick={handleStartMatching}
-                className="w-full py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-2xl font-semibold hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg"
+                className="w-full py-4 bg-brand-primary text-white rounded-xl font-semibold hover:bg-brand-primaryHover transition-all duration-200 shadow-md focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2"
               >
                 开始演示匹配
               </button>
@@ -173,11 +174,11 @@ const MatchingSystem = ({ isOpen, onClose, targetRestaurant = null }) => {
           {currentStep === 'matching' && (
             <div className="text-center py-8">
               <div className="relative w-32 h-32 mx-auto mb-6">
-                <div className="absolute inset-0 border-4 border-orange-500 rounded-full animate-ping"></div>
-                <div className="absolute inset-2 border-4 border-orange-400 rounded-full animate-ping" style={{ animationDelay: '0.5s' }}></div>
-                <div className="absolute inset-4 border-4 border-orange-300 rounded-full animate-ping" style={{ animationDelay: '1s' }}></div>
+                <div className="absolute inset-0 border-4 border-brand-primary rounded-full animate-ping"></div>
+                <div className="absolute inset-2 border-4 border-teal-500 rounded-full animate-ping" style={{ animationDelay: '0.5s' }}></div>
+                <div className="absolute inset-4 border-4 border-teal-300 rounded-full animate-ping" style={{ animationDelay: '1s' }}></div>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <Search className="w-8 h-8 text-orange-500" />
+                  <Search className="w-8 h-8 text-brand-primary" />
                 </div>
               </div>
               <h3 className="text-xl font-semibold text-gray-800 mb-2">
@@ -202,7 +203,7 @@ const MatchingSystem = ({ isOpen, onClose, targetRestaurant = null }) => {
               {matchedUsers.map(user => (
                 <div key={user.id} className="bg-gray-50 rounded-2xl p-4 animate-slide-up">
                   <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 rounded-full bg-orange-500 text-white flex items-center justify-center font-bold">
+                    <div className="w-12 h-12 rounded-full bg-brand-primary text-white flex items-center justify-center font-bold">
                       {user.name.charAt(0)}
                     </div>
                     <div className="flex-1">
@@ -219,7 +220,7 @@ const MatchingSystem = ({ isOpen, onClose, targetRestaurant = null }) => {
                       </p>
                       <div className="flex space-x-1">
                         {user.tags.map((tag, index) => (
-                          <span key={index} className="text-xs bg-orange-100 text-orange-600 px-2 py-0.5 rounded-full">
+                          <span key={index} className="text-xs bg-brand-primarySoft text-brand-primary px-2 py-0.5 rounded-full">
                             {tag}
                           </span>
                         ))}
@@ -227,11 +228,11 @@ const MatchingSystem = ({ isOpen, onClose, targetRestaurant = null }) => {
                     </div>
                   </div>
                   <div className="flex space-x-2 mt-4">
-                    <button className="flex-1 flex items-center justify-center space-x-2 py-2 bg-orange-500 text-white rounded-xl hover:bg-orange-600 transition-colors">
+                    <button className="flex-1 flex items-center justify-center space-x-2 py-2 bg-brand-primary text-white rounded-xl hover:bg-brand-primaryHover transition-colors focus:outline-none focus:ring-2 focus:ring-brand-primary">
                       <MessageCircle className="w-4 h-4" />
                       <span>打个招呼</span>
                     </button>
-                    <button className="flex-1 flex items-center justify-center space-x-2 py-2 border border-orange-500 text-orange-500 rounded-xl hover:bg-orange-50 transition-colors">
+                    <button className="flex-1 flex items-center justify-center space-x-2 py-2 border border-brand-primary text-brand-primary rounded-xl hover:bg-brand-primarySubtle transition-colors focus:outline-none focus:ring-2 focus:ring-brand-primary">
                       <UserPlus className="w-4 h-4" />
                       <span>加入群聊</span>
                     </button>
@@ -248,7 +249,7 @@ const MatchingSystem = ({ isOpen, onClose, targetRestaurant = null }) => {
                 </button>
                 <button
                   onClick={onClose}
-                  className="flex-1 py-3 bg-orange-500 text-white rounded-xl hover:bg-orange-600 transition-colors"
+                  className="flex-1 py-3 bg-brand-primary text-white rounded-xl hover:bg-brand-primaryHover transition-colors focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2"
                 >
                   完成
                 </button>

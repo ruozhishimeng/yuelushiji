@@ -18,7 +18,7 @@ const PersonalCenter = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-3xl max-w-md w-full max-h-[90vh] overflow-hidden shadow-2xl">
+      <div className="bg-white rounded-2xl max-w-md w-full max-h-[90vh] overflow-hidden shadow-xl">
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <div className="flex items-center space-x-2">
             <h2 className="text-2xl font-bold text-gray-800">个人中心</h2>
@@ -26,16 +26,17 @@ const PersonalCenter = ({ isOpen, onClose }) => {
           </div>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            aria-label="关闭个人中心"
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-brand-primary"
           >
             <X className="w-6 h-6 text-gray-500" />
           </button>
         </div>
 
         <div className="overflow-y-auto max-h-[80vh] p-6 space-y-6">
-          <div className="bg-gradient-to-r from-orange-50 to-yellow-50 rounded-2xl p-4">
+          <div className="bg-brand-primarySubtle rounded-xl p-4">
             <div className="flex items-center space-x-4">
-              <div className="w-16 h-16 rounded-full bg-orange-500 text-white flex items-center justify-center text-xl font-bold">
+              <div className="w-16 h-16 rounded-full bg-brand-primary text-white flex items-center justify-center text-xl font-bold">
                 {demoUser.name.charAt(0)}
               </div>
               <div className="flex-1">
@@ -56,7 +57,7 @@ const PersonalCenter = ({ isOpen, onClose }) => {
               {demoCommunityTags.map((tag, index) => (
                 <span
                   key={index}
-                  className="px-3 py-1 bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 text-sm rounded-full font-medium"
+                  className="px-3 py-1 bg-blue-50 text-blue-700 text-sm rounded-full font-medium"
                 >
                   {tag}
                 </span>
@@ -73,7 +74,7 @@ const PersonalCenter = ({ isOpen, onClose }) => {
                   <select
                     value={selectedTaste}
                     onChange={(event) => setSelectedTaste(event.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent appearance-none bg-white"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent appearance-none bg-white"
                   >
                     {demoTasteOptions.map(option => (
                       <option key={option} value={option}>{option}</option>
@@ -88,7 +89,7 @@ const PersonalCenter = ({ isOpen, onClose }) => {
                   <select
                     value={selectedPrice}
                     onChange={(event) => setSelectedPrice(event.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent appearance-none bg-white"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent appearance-none bg-white"
                   >
                     {demoPriceOptions.map(option => (
                       <option key={option} value={option}>{option}</option>
@@ -108,18 +109,18 @@ const PersonalCenter = ({ isOpen, onClose }) => {
                   key={badge.id}
                   className={`aspect-square rounded-xl border-2 flex flex-col items-center justify-center p-2 transition-all duration-300 ${
                     badge.earned
-                      ? 'border-orange-200 bg-orange-50 hover:bg-orange-100'
+                      ? 'border-brand-primarySoft bg-brand-primarySubtle hover:bg-brand-primarySoft'
                       : 'border-gray-200 bg-gray-50'
                   }`}
                 >
                   <badge.icon
                     className={`w-6 h-6 mb-1 ${
-                      badge.earned ? 'text-orange-500' : 'text-gray-400'
+                      badge.earned ? 'text-brand-primary' : 'text-gray-400'
                     }`}
                   />
                   <span
                     className={`text-xs text-center font-medium ${
-                      badge.earned ? 'text-orange-700' : 'text-gray-500'
+                      badge.earned ? 'text-brand-primaryHover' : 'text-gray-500'
                     }`}
                   >
                     {badge.name}
@@ -137,7 +138,7 @@ const PersonalCenter = ({ isOpen, onClose }) => {
               <div className="flex items-center space-x-3">
                 <MapPin className="w-5 h-5 text-gray-500" />
                 <span className="font-medium text-gray-800">我的足迹</span>
-                <span className="bg-orange-100 text-orange-600 text-xs px-2 py-1 rounded-full">
+                <span className="bg-brand-primarySoft text-brand-primary text-xs px-2 py-1 rounded-full">
                   {demoFootprints.length}
                 </span>
               </div>

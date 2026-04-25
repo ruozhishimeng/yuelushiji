@@ -91,8 +91,8 @@ const RankingPanel = ({ restaurants, onRestaurantSelect }) => {
             onClick={() => setActiveKey(ranker.key)}
             className={`flex-none rounded-full px-4 py-2 text-sm font-semibold transition-all ${
               activeKey === ranker.key
-                ? 'bg-orange-500 text-white shadow-md'
-                : 'bg-gray-100 text-gray-600 hover:bg-orange-50 hover:text-orange-700'
+                ? 'bg-brand-primary text-white shadow-md'
+                : 'bg-gray-100 text-gray-600 hover:bg-brand-primarySubtle hover:text-brand-primaryHover'
             }`}
           >
             {ranker.label}
@@ -100,15 +100,15 @@ const RankingPanel = ({ restaurants, onRestaurantSelect }) => {
         ))}
       </div>
 
-      <div className="rounded-xl border border-orange-100 bg-orange-50 px-4 py-3">
+      <div className="rounded-xl border border-brand-primarySoft bg-brand-primarySubtle px-4 py-3">
         <div className="flex items-center gap-2">
-          <TrendingUp className="h-4 w-4 text-orange-600" />
-          <span className="text-sm font-semibold text-orange-800">{activeRanker.label}</span>
-          <span className="rounded-full bg-white px-2 py-0.5 text-xs text-orange-700">
+          <TrendingUp className="h-4 w-4 text-brand-primary" />
+          <span className="text-sm font-semibold text-brand-primaryHover">{activeRanker.label}</span>
+          <span className="rounded-full bg-white px-2 py-0.5 text-xs text-brand-primaryHover">
             {activeRanker.badge}
           </span>
         </div>
-        <p className="mt-1 text-sm text-orange-700">{activeRanker.description}</p>
+        <p className="mt-1 text-sm text-brand-primaryHover">{activeRanker.description}</p>
       </div>
 
       {rankedRestaurants.length === 0 ? (
@@ -123,11 +123,11 @@ const RankingPanel = ({ restaurants, onRestaurantSelect }) => {
               key={`${activeKey}-${restaurant.id}`}
               type="button"
               onClick={() => onRestaurantSelect(restaurant)}
-              className="w-full rounded-xl border border-gray-200 bg-white p-4 text-left shadow-sm transition-all hover:border-orange-200 hover:bg-orange-50 hover:shadow-md"
+              className="w-full rounded-xl border border-gray-200 bg-white p-4 text-left shadow-sm transition-all hover:border-brand-primarySoft hover:bg-brand-primarySubtle hover:shadow-md focus:outline-none focus:ring-2 focus:ring-brand-primary"
             >
               <div className="flex gap-4">
                 <div className={`flex h-10 w-10 flex-none items-center justify-center rounded-xl text-base font-bold ${
-                  index < 3 ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-600'
+                  index < 3 ? 'bg-brand-primary text-white' : 'bg-gray-100 text-gray-600'
                 }`}>
                   {index + 1}
                 </div>
@@ -138,7 +138,7 @@ const RankingPanel = ({ restaurants, onRestaurantSelect }) => {
                       <p className="mt-1 line-clamp-1 text-sm text-gray-500">{restaurant.location}</p>
                     </div>
                     {activeKey === 'student-demo' && (
-                      <span className="flex-none rounded-full bg-yellow-100 px-2 py-1 text-xs font-medium text-yellow-700">
+                      <span className="flex-none rounded-full bg-amber-100 px-2 py-1 text-xs font-medium text-amber-700">
                         演示热度 {demoHeat[index] || 20}
                       </span>
                     )}
@@ -146,7 +146,7 @@ const RankingPanel = ({ restaurants, onRestaurantSelect }) => {
 
                   <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-gray-600">
                     <span className="flex items-center gap-1">
-                      <Star className="h-4 w-4 fill-current text-yellow-500" />
+                        <Star className="h-4 w-4 fill-current text-brand-warning" />
                       {restaurant.rating || '暂无评分'}
                     </span>
                     <span>{formatAveragePrice(restaurant.avgPrice)}</span>
@@ -156,7 +156,7 @@ const RankingPanel = ({ restaurants, onRestaurantSelect }) => {
                       {formatDistance(restaurant.distance)}
                     </span>
                     {activeKey === 'student-demo' && (
-                      <span className="flex items-center gap-1 text-orange-600">
+                        <span className="flex items-center gap-1 text-brand-primary">
                         <Users className="h-4 w-4" />
                         待接入真实学生评价
                       </span>

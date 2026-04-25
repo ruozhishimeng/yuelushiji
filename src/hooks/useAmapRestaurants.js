@@ -25,13 +25,13 @@ const createMarkerContent = (restaurant) => {
   wrapper.className = 'relative flex items-center';
 
   const bubble = document.createElement('div');
-  bubble.className = 'bg-orange-500 text-white px-3 py-1 rounded-full text-xs font-medium shadow-lg flex items-center space-x-1 whitespace-nowrap';
+  bubble.className = 'bg-brand-primary text-white px-3 py-1 rounded-full text-xs font-medium shadow-md flex items-center space-x-1 whitespace-nowrap';
 
   const label = document.createElement('span');
   label.textContent = restaurant.name.length > 6 ? `${restaurant.name.substring(0, 6)}...` : restaurant.name;
 
   const pointer = document.createElement('div');
-  pointer.className = 'absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-orange-500';
+  pointer.className = 'absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-brand-primary';
 
   bubble.appendChild(label);
   bubble.appendChild(pointer);

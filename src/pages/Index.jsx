@@ -79,7 +79,7 @@ const Index = () => {
   };
 
   return (
-    <div className="relative w-full h-screen overflow-hidden">
+    <div className="relative h-dvh w-full overflow-hidden">
       <div
         ref={mapRef}
         className="w-full h-full"
@@ -87,17 +87,17 @@ const Index = () => {
         onClick={handleMapClick}
       >
         {mapLoading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-orange-50 to-yellow-50 z-10">
+          <div className="absolute inset-0 z-10 flex items-center justify-center bg-brand-primarySubtle">
             <div className="text-center">
-              <div className="w-16 h-16 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+              <div className="mx-auto mb-4 h-16 w-16 animate-spin rounded-full border-4 border-brand-primary border-t-transparent"></div>
               <p className="text-gray-600">地图加载中...</p>
             </div>
           </div>
         )}
 
         {mapError && !mapLoading && (
-          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-50 to-yellow-50">
-            <div className="text-center p-8 bg-white/90 backdrop-blur-md rounded-2xl shadow-xl border border-orange-200">
+          <div className="flex h-full w-full items-center justify-center bg-brand-primarySubtle">
+            <div className="rounded-2xl border border-brand-primarySoft bg-white/95 p-8 text-center shadow-md">
               <div className="text-6xl mb-4">地图</div>
               <h2 className="text-2xl font-bold text-gray-800 mb-2">地图加载失败</h2>
               <p className="text-gray-600 mb-4">
@@ -108,7 +108,7 @@ const Index = () => {
               {mapLoadAttempts < 3 && (
                 <button
                   onClick={retryMapLoad}
-                  className="px-6 py-3 bg-orange-500 text-white rounded-xl hover:bg-orange-600 transition-colors"
+                  className="rounded-xl bg-brand-primary px-6 py-3 text-white transition-colors hover:bg-brand-primaryHover focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2"
                 >
                   重试 ({mapLoadAttempts}/3)
                 </button>
@@ -153,16 +153,18 @@ const Index = () => {
       <div className="absolute bottom-8 right-4 z-20 flex items-center space-x-3">
         <button
           onClick={() => setShowMatchingSystem(true)}
-          className="flex items-center justify-center w-12 h-12 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+          aria-label="打开饭搭子匹配"
+          className="flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-md transition-all duration-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-brand-primary"
         >
-          <Users className="w-5 h-5 text-orange-500" />
+          <Users className="w-5 h-5 text-brand-primary" />
         </button>
 
         <button
           onClick={locateCenter}
-          className="flex items-center justify-center w-12 h-12 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+          aria-label="回到地图中心"
+          className="flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-md transition-all duration-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-brand-primary"
         >
-          <Locate className="w-5 h-5 text-orange-500" />
+          <Locate className="w-5 h-5 text-brand-primary" />
         </button>
       </div>
 
@@ -170,7 +172,7 @@ const Index = () => {
         isOpen={activeBottomPanel === 'ranking'}
         title="大学城美食榜单"
         badge="演示功能"
-        description="当前基于真实高德商家 POI 和前端演示规则生成，正式版会接入真实学生评价权重。"
+        description="当前基于真实地图 POI 和前端演示规则生成，正式版会接入真实学生评价权重。"
         onClose={() => setActiveBottomPanel(null)}
       >
         <RankingPanel

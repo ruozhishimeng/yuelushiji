@@ -60,15 +60,15 @@ const AIAssistant = ({ isOpen, onClose, onRestaurantSelect, onMatchingOpen }) =>
 
   return (
     <div className="fixed bottom-28 left-1/2 z-50 w-[calc(100vw-32px)] max-w-96 -translate-x-1/2">
-      <div className={`bg-white rounded-3xl shadow-xl transition-all duration-500 ease-in-out overflow-hidden ${
+      <div className={`bg-white rounded-2xl shadow-xl transition-all duration-200 ease-out overflow-hidden ${
         isExpanded ? 'w-full h-auto p-4' : 'mx-auto h-16 w-16'
       }`}>
         {!isExpanded ? (
           <button
             onClick={() => setExpanded(true)}
-            className="w-full h-full flex items-center justify-center bg-white rounded-3xl hover:bg-gray-50 transition-colors"
+            className="w-full h-full flex items-center justify-center bg-white rounded-2xl hover:bg-gray-50 transition-colors"
           >
-            <Mic className="w-6 h-6 text-orange-500" />
+            <Mic className="w-6 h-6 text-brand-primary" />
           </button>
         ) : (
           <div className="space-y-4">
@@ -79,7 +79,8 @@ const AIAssistant = ({ isOpen, onClose, onRestaurantSelect, onMatchingOpen }) =>
               </div>
               <button
                 onClick={handleClose}
-                className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                aria-label="关闭 AI 语音助手"
+                className="p-1 hover:bg-gray-100 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-brand-primary"
               >
                 <X className="w-5 h-5 text-gray-500" />
               </button>
@@ -90,7 +91,7 @@ const AIAssistant = ({ isOpen, onClose, onRestaurantSelect, onMatchingOpen }) =>
                 onClick={() => setActiveTab('food')}
                 className={`flex-1 flex items-center justify-center space-x-2 py-2 px-3 rounded-lg transition-all duration-300 ${
                   activeTab === 'food'
-                    ? 'bg-white text-orange-500 shadow-sm'
+                    ? 'bg-white text-brand-primary shadow-sm'
                     : 'text-gray-600 hover:text-gray-800'
                 }`}
               >
@@ -101,7 +102,7 @@ const AIAssistant = ({ isOpen, onClose, onRestaurantSelect, onMatchingOpen }) =>
                 onClick={() => setActiveTab('matching')}
                 className={`flex-1 flex items-center justify-center space-x-2 py-2 px-3 rounded-lg transition-all duration-300 ${
                   activeTab === 'matching'
-                    ? 'bg-white text-orange-500 shadow-sm'
+                    ? 'bg-white text-brand-primary shadow-sm'
                     : 'text-gray-600 hover:text-gray-800'
                 }`}
               >
@@ -118,7 +119,7 @@ const AIAssistant = ({ isOpen, onClose, onRestaurantSelect, onMatchingOpen }) =>
                       {[...Array(5)].map((_, i) => (
                         <div
                           key={i}
-                          className="w-2 bg-orange-500 rounded-full animate-pulse"
+                          className="w-2 bg-brand-primary rounded-full animate-pulse"
                           style={{
                             height: `${Math.random() * 40 + 20}px`,
                             animationDelay: `${i * 0.1}s`,
@@ -135,15 +136,15 @@ const AIAssistant = ({ isOpen, onClose, onRestaurantSelect, onMatchingOpen }) =>
                     <div className="space-y-2">
                       <p className="text-sm font-medium text-gray-700">正在听你说...</p>
                       <div className="flex items-center justify-center space-x-2">
-                        <div className="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></div>
-                        <div className="w-2 h-2 bg-orange-500 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-                        <div className="w-2 h-2 bg-orange-500 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+                        <div className="w-2 h-2 bg-brand-primary rounded-full animate-pulse"></div>
+                        <div className="w-2 h-2 bg-brand-primary rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+                        <div className="w-2 h-2 bg-brand-primary rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
                       </div>
                     </div>
                   ) : showResult ? (
                     <div className="space-y-3">
-                      <div className="p-3 bg-orange-50 rounded-lg border border-orange-200">
-                        <p className="text-sm text-orange-600 font-medium mb-1">识别结果：</p>
+                      <div className="p-3 bg-brand-primarySubtle rounded-lg border border-brand-primarySoft">
+                        <p className="text-sm text-brand-primary font-medium mb-1">识别结果：</p>
                         <p className="text-gray-800 text-sm">{transcript}</p>
                       </div>
 
@@ -154,13 +155,13 @@ const AIAssistant = ({ isOpen, onClose, onRestaurantSelect, onMatchingOpen }) =>
                             {DEMO_RECOMMENDATIONS.map((restaurant) => (
                               <div
                                 key={restaurant.id}
-                                className="flex-shrink-0 w-48 p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer hover:bg-orange-50 transition-colors"
+                                className="flex-shrink-0 w-48 p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer hover:bg-brand-primarySubtle transition-colors"
                                 onClick={() => handleRestaurantClick(restaurant)}
                               >
                                 <div className="flex items-center justify-between mb-1">
                                   <h4 className="font-medium text-gray-800 text-sm truncate">{restaurant.name}</h4>
                                   <div className="flex items-center space-x-1">
-                                    <span className="text-yellow-500">★</span>
+                                    <span className="text-brand-warning">★</span>
                                     <span className="text-xs text-gray-600">{restaurant.rating}</span>
                                   </div>
                                 </div>
@@ -182,8 +183,8 @@ const AIAssistant = ({ isOpen, onClose, onRestaurantSelect, onMatchingOpen }) =>
                         <div className="p-2 bg-gray-50 rounded-lg">
                           <p className="text-xs text-gray-600">试试说："帮我找找天马附近评分最高的湘菜"</p>
                         </div>
-                        <div className="p-2 bg-orange-50 rounded-lg">
-                          <p className="text-xs text-orange-700">真实商家数据已由地图搜索加载，AI 推荐后续再接入。</p>
+                        <div className="p-2 bg-brand-primarySubtle rounded-lg">
+                          <p className="text-xs text-brand-primaryHover">真实商家数据已由地图搜索加载，AI 推荐后续再接入。</p>
                         </div>
                       </div>
                     </div>
@@ -194,7 +195,7 @@ const AIAssistant = ({ isOpen, onClose, onRestaurantSelect, onMatchingOpen }) =>
                   {!isListening && !showResult && (
                     <button
                       onClick={handleStartListening}
-                      className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-full hover:from-orange-600 hover:to-orange-700 transition-all duration-300 text-sm"
+                      className="flex items-center space-x-2 px-4 py-2 bg-brand-primary text-white rounded-full hover:bg-brand-primaryHover transition-all duration-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2"
                     >
                       <Mic className="w-4 h-4" />
                       <span>开始说话</span>
@@ -205,14 +206,14 @@ const AIAssistant = ({ isOpen, onClose, onRestaurantSelect, onMatchingOpen }) =>
                     <div className="flex space-x-2">
                       <button
                         onClick={handleStartListening}
-                        className="flex items-center space-x-1 px-3 py-2 border border-orange-500 text-orange-500 rounded-full hover:bg-orange-50 transition-colors text-sm"
+                        className="flex items-center space-x-1 px-3 py-2 border border-brand-primary text-brand-primary rounded-full hover:bg-brand-primarySubtle transition-colors text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary"
                       >
                         <Mic className="w-3 h-3" />
                         <span>重新识别</span>
                       </button>
                       <button
                         onClick={handleClose}
-                        className="px-3 py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition-colors text-sm"
+                        className="px-3 py-2 bg-brand-primary text-white rounded-full hover:bg-brand-primaryHover transition-colors text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2"
                       >
                         确定
                       </button>
@@ -231,7 +232,7 @@ const AIAssistant = ({ isOpen, onClose, onRestaurantSelect, onMatchingOpen }) =>
 
                 <button
                   onClick={handleMatchingClick}
-                  className="w-full flex items-center justify-center space-x-2 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all duration-300"
+                  className="w-full flex items-center justify-center space-x-2 py-3 bg-brand-primary text-white rounded-xl hover:bg-brand-primaryHover transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2"
                 >
                   <Users className="w-5 h-5" />
                   <span>开始搭一搭</span>

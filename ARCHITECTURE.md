@@ -86,6 +86,7 @@ flowchart TD
   name,
   coordinates,
   rating,
+  reviewCount,
   avgPrice,
   priceLevel,
   distance,
