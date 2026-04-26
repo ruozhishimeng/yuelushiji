@@ -4,30 +4,33 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 41 55% 91%;
     --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
+    --card: 44 56% 95%;
     --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
+    --popover: 44 56% 95%;
     --popover-foreground: 222.2 84% 4.9%;
     --primary: 222.2 47.4% 11.2%;
     --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
+    --secondary: 44 56% 95%;
     --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
+    --muted: 44 42% 92%;
     --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
+    --accent: 44 42% 92%;
     --accent-foreground: 222.2 47.4% 11.2%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
+    --border: 38 28% 82%;
+    --input: 38 28% 82%;
     --ring: 173 78% 26%;
     --brand-primary: 173 78% 26%;
     --brand-primary-hover: 175 68% 21%;
     --brand-primary-soft: 167 85% 89%;
     --brand-primary-subtle: 166 76% 97%;
-    --brand-surface: 0 0% 100%;
+    --brand-paper: 41 55% 91%;
+    --brand-paper-soft: 44 56% 95%;
+    --brand-paper-deep: 38 34% 82%;
+    --brand-surface: 44 56% 95%;
     --brand-ink: 222 47% 11%;
     --brand-muted: 215 16% 47%;
     --brand-line: 214 32% 91%;
@@ -103,6 +106,15 @@
     100% {
       opacity: 1;
       transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-ping,
+    .animate-pulse,
+    .animate-bounce,
+    .animate-spin {
+      animation: none;
     }
   }
 }

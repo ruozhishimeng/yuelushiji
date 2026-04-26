@@ -32,6 +32,8 @@ async function loadPlugins() {
       devHtmlTransformer(CHAT_VARIABLE),
     ];
 
+  // NoCode compiler plugin - only loaded when NOCODE_COMPILER_PATH is set
+  // WARNING: do not set NOCODE_COMPILER_PATH to untrusted input
   if (process.env.NOCODE_COMPILER_PATH) {
     const { componentCompiler } = await import(process.env.NOCODE_COMPILER_PATH);
     plugins.push(componentCompiler());
@@ -46,7 +48,7 @@ export default defineConfig(async () => {
   return {
     server: {
       host: '::',
-      port: '8080',
+      port: 8080,
       hmr: {
         overlay: false,
       },
@@ -55,16 +57,21 @@ export default defineConfig(async () => {
     base: publicPath,
     build: {
       outDir,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+            'amap': ['@amap/amap-jsapi-loader'],
+            'icons': ['lucide-react'],
+          }
+        }
+      }
     },
     resolve: {
       alias: [
         {
           find: '@',
           replacement: fileURLToPath(new URL('./src', import.meta.url)),
-        },
-        {
-          find: 'lib',
-          replacement: resolve(__dirname, 'lib'),
         },
       ],
     },

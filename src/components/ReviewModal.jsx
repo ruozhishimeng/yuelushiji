@@ -41,7 +41,7 @@ const ReviewModal = ({ restaurant, isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-xl">
+      <div className="bg-brand-paperSoft rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-xl">
         {/* 头部 */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <div>
@@ -63,7 +63,7 @@ const ReviewModal = ({ restaurant, isOpen, onClose }) => {
           <button
             onClick={onClose}
             aria-label="关闭评价列表"
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-brand-primary"
+            className="p-2 hover:bg-brand-paper rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-brand-primary"
           >
             <X className="w-6 h-6 text-gray-500" />
           </button>
@@ -79,7 +79,7 @@ const ReviewModal = ({ restaurant, isOpen, onClose }) => {
                 className={`flex items-center space-x-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                   activeFilter === option.key
                     ? 'bg-brand-primary text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    : 'bg-brand-paper text-gray-700 hover:bg-brand-paperDeep'
                 }`}
               >
                 {option.icon && <option.icon className="w-4 h-4" />}

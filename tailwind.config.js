@@ -2,10 +2,8 @@
 module.exports = {
   darkMode: ["class"],
   content: [
-    "./pages/**/*.{js,jsx}",
-    "./components/**/*.{js,jsx}",
-    "./app/**/*.{js,jsx}",
-    "./src/**/*.{js,jsx}",
+    "./index.html",
+    "./src/**/*.{js,jsx}"
   ],
   prefix: "",
   theme: {
@@ -56,6 +54,9 @@ module.exports = {
           primaryHover: "hsl(var(--brand-primary-hover))",
           primarySoft: "hsl(var(--brand-primary-soft))",
           primarySubtle: "hsl(var(--brand-primary-subtle))",
+          paper: "hsl(var(--brand-paper) / <alpha-value>)",
+          paperSoft: "hsl(var(--brand-paper-soft) / <alpha-value>)",
+          paperDeep: "hsl(var(--brand-paper-deep) / <alpha-value>)",
           surface: "hsl(var(--brand-surface))",
           ink: "hsl(var(--brand-ink))",
           muted: "hsl(var(--brand-muted))",

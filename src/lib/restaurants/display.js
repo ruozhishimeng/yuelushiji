@@ -47,18 +47,8 @@ export const formatReviewCount = (restaurant) => {
   return `${getReviewCount(restaurant)}条`;
 };
 
-export const getBusyStatus = (restaurant) => {
-  if (restaurant.busyStatus === 'unknown' || !restaurant.rating) {
-    return { status: 'unknown', text: '实时状态待补充', color: 'text-gray-400' };
-  }
-
-  if (restaurant.rating >= 4.7) {
-    return { status: 'crowded', text: '当前排队较多', color: 'text-red-500' };
-  }
-
-  if (restaurant.rating >= 4.3) {
-    return { status: 'moderate', text: '有少量空位', color: 'text-brand-warning' };
-  }
-
-  return { status: 'quiet', text: '无需排队', color: 'text-green-500' };
-};
+export const getBusyStatus = (_restaurant) => ({
+  status: 'unknown',
+  text: '暂无实时拥挤信息',
+  color: 'text-gray-400'
+});

@@ -1,10 +1,14 @@
-import { Mic, X, Utensils, Users } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import { MapPin, Mic, Shuffle, Star, Utensils, Users, X } from 'lucide-react';
+import React, { useEffect, useMemo, useState } from 'react';
+import {
+  formatAveragePrice,
+  formatDistance
+} from '../lib/restaurants/display';
+import { DEMO_VOICE_BAR_HEIGHTS } from '../mocks/demoData';
 
 const DEMO_TRANSCRIPT = '正在解析你的美食需求...';
-const DEMO_RECOMMENDATIONS = [];
 
-const AIAssistant = ({ isOpen, onClose, onRestaurantSelect, onMatchingOpen }) => {
+const AIAssistant = ({ isOpen, restaurants = [], onClose, onRestaurantSelect, onMatchingOpen }) => {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [showResult, setShowResult] = useState(false);
@@ -49,10 +53,23 @@ const AIAssistant = ({ isOpen, onClose, onRestaurantSelect, onMatchingOpen }) =>
     handleClose();
   };
 
+  const handleRandomRestaurant = () => {
+    if (restaurants.length === 0) return;
+    const randomIndex = Math.floor(Math.random() * restaurants.length);
+    handleRestaurantClick(restaurants[randomIndex]);
+  };
+
   const handleMatchingClick = () => {
     onMatchingOpen(null);
     handleClose();
   };
+
+  const recommendedRestaurants = useMemo(
+    () => [...restaurants]
+      .sort((a, b) => (b.rating || 0) - (a.rating || 0))
+      .slice(0, 4),
+    [restaurants]
+  );
 
   if (!isOpen) return null;
 
@@ -60,13 +77,13 @@ const AIAssistant = ({ isOpen, onClose, onRestaurantSelect, onMatchingOpen }) =>
 
   return (
     <div className="fixed bottom-28 left-1/2 z-50 w-[calc(100vw-32px)] max-w-96 -translate-x-1/2">
-      <div className={`bg-white rounded-2xl shadow-xl transition-all duration-200 ease-out overflow-hidden ${
+      <div className={`bg-brand-paperSoft rounded-2xl shadow-xl transition-all duration-200 ease-out overflow-hidden ${
         isExpanded ? 'w-full h-auto p-4' : 'mx-auto h-16 w-16'
       }`}>
         {!isExpanded ? (
           <button
             onClick={() => setExpanded(true)}
-            className="w-full h-full flex items-center justify-center bg-white rounded-2xl hover:bg-gray-50 transition-colors"
+            className="w-full h-full flex items-center justify-center bg-brand-paperSoft rounded-2xl hover:bg-brand-paper transition-colors"
           >
             <Mic className="w-6 h-6 text-brand-primary" />
           </button>
@@ -75,23 +92,23 @@ const AIAssistant = ({ isOpen, onClose, onRestaurantSelect, onMatchingOpen }) =>
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <h3 className="font-semibold text-gray-800">AI 语音助手</h3>
-                <span className="px-2 py-0.5 bg-gray-100 text-gray-500 text-xs rounded-full">演示功能</span>
+                <span className="px-2 py-0.5 bg-brand-paper text-gray-500 text-xs rounded-full">演示功能</span>
               </div>
               <button
                 onClick={handleClose}
                 aria-label="关闭 AI 语音助手"
-                className="p-1 hover:bg-gray-100 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                className="p-1 hover:bg-brand-paper rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-brand-primary"
               >
                 <X className="w-5 h-5 text-gray-500" />
               </button>
             </div>
 
-            <div className="flex bg-gray-100 rounded-xl p-1">
+            <div className="flex bg-brand-paper rounded-xl p-1">
               <button
                 onClick={() => setActiveTab('food')}
                 className={`flex-1 flex items-center justify-center space-x-2 py-2 px-3 rounded-lg transition-all duration-300 ${
                   activeTab === 'food'
-                    ? 'bg-white text-brand-primary shadow-sm'
+                    ? 'bg-brand-paperSoft text-brand-primary shadow-sm'
                     : 'text-gray-600 hover:text-gray-800'
                 }`}
               >
@@ -102,7 +119,7 @@ const AIAssistant = ({ isOpen, onClose, onRestaurantSelect, onMatchingOpen }) =>
                 onClick={() => setActiveTab('matching')}
                 className={`flex-1 flex items-center justify-center space-x-2 py-2 px-3 rounded-lg transition-all duration-300 ${
                   activeTab === 'matching'
-                    ? 'bg-white text-brand-primary shadow-sm'
+                    ? 'bg-brand-paperSoft text-brand-primary shadow-sm'
                     : 'text-gray-600 hover:text-gray-800'
                 }`}
               >
@@ -121,7 +138,7 @@ const AIAssistant = ({ isOpen, onClose, onRestaurantSelect, onMatchingOpen }) =>
                           key={i}
                           className="w-2 bg-brand-primary rounded-full animate-pulse"
                           style={{
-                            height: `${Math.random() * 40 + 20}px`,
+                            height: `${DEMO_VOICE_BAR_HEIGHTS[i]}px`,
                             animationDelay: `${i * 0.1}s`,
                             animationDuration: '1.5s'
                           }}
@@ -143,35 +160,43 @@ const AIAssistant = ({ isOpen, onClose, onRestaurantSelect, onMatchingOpen }) =>
                     </div>
                   ) : showResult ? (
                     <div className="space-y-3">
-                      <div className="p-3 bg-brand-primarySubtle rounded-lg border border-brand-primarySoft">
+                      <div className="p-3 bg-brand-paper rounded-lg border border-brand-paperDeep">
                         <p className="text-sm text-brand-primary font-medium mb-1">识别结果：</p>
                         <p className="text-gray-800 text-sm">{transcript}</p>
                       </div>
 
                       <div className="space-y-2">
                         <p className="text-sm font-medium text-gray-700">为您推荐：</p>
-                        {DEMO_RECOMMENDATIONS.length > 0 ? (
-                          <div className="flex space-x-3 overflow-x-auto pb-2">
-                            {DEMO_RECOMMENDATIONS.map((restaurant) => (
-                              <div
+                        {recommendedRestaurants.length > 0 ? (
+                          <div className="space-y-2">
+                            {recommendedRestaurants.map((restaurant) => (
+                              <button
                                 key={restaurant.id}
-                                className="flex-shrink-0 w-48 p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer hover:bg-brand-primarySubtle transition-colors"
+                                type="button"
+                                className="w-full rounded-lg border border-brand-paperDeep bg-brand-paper p-3 text-left transition-colors hover:bg-brand-primarySubtle focus:outline-none focus:ring-2 focus:ring-brand-primary"
                                 onClick={() => handleRestaurantClick(restaurant)}
                               >
-                                <div className="flex items-center justify-between mb-1">
-                                  <h4 className="font-medium text-gray-800 text-sm truncate">{restaurant.name}</h4>
-                                  <div className="flex items-center space-x-1">
-                                    <span className="text-brand-warning">★</span>
-                                    <span className="text-xs text-gray-600">{restaurant.rating}</span>
+                                <div className="flex items-start justify-between gap-3">
+                                  <div className="min-w-0">
+                                    <h4 className="truncate text-sm font-semibold text-gray-900">{restaurant.name}</h4>
+                                    <p className="mt-1 flex items-center gap-1 text-xs text-gray-500">
+                                      <MapPin className="h-3.5 w-3.5" />
+                                      {formatDistance(restaurant.distance)}
+                                      <span>·</span>
+                                      {formatAveragePrice(restaurant.avgPrice)}
+                                    </p>
                                   </div>
+                                  <span className="flex flex-none items-center gap-1 text-xs font-semibold text-amber-700">
+                                    <Star className="h-3.5 w-3.5 fill-current" />
+                                    {restaurant.rating || '暂无'}
+                                  </span>
                                 </div>
-                                <p className="text-xs text-gray-600">{restaurant.comment}</p>
-                              </div>
+                              </button>
                             ))}
                           </div>
                         ) : (
-                          <div className="p-3 bg-gray-50 rounded-lg border border-gray-200">
-                            <p className="text-sm text-gray-600">AI 推荐暂未接入真实商家数据，请先使用左侧搜索和地图商家。</p>
+                          <div className="p-3 bg-brand-paper rounded-lg border border-brand-paperDeep">
+                            <p className="text-sm text-gray-600">正在等待真实商家 POI 数据，进入地图页后也会继续刷新。</p>
                           </div>
                         )}
                       </div>
@@ -180,11 +205,11 @@ const AIAssistant = ({ isOpen, onClose, onRestaurantSelect, onMatchingOpen }) =>
                     <div className="space-y-2">
                       <p className="text-sm font-medium text-gray-700">正在倾听您的需求...</p>
                       <div className="space-y-2">
-                        <div className="p-2 bg-gray-50 rounded-lg">
-                          <p className="text-xs text-gray-600">试试说："帮我找找天马附近评分最高的湘菜"</p>
+                        <div className="p-2 bg-brand-paper rounded-lg">
+                          <p className="text-xs text-gray-600">试试说：&ldquo;帮我找找天马附近评分最高的湘菜&rdquo;</p>
                         </div>
-                        <div className="p-2 bg-brand-primarySubtle rounded-lg">
-                          <p className="text-xs text-brand-primaryHover">真实商家数据已由地图搜索加载，AI 推荐后续再接入。</p>
+                        <div className="p-2 bg-brand-paper rounded-lg">
+                          <p className="text-xs text-brand-primaryHover">智选会优先使用当前真实地图 POI，不生成虚构商家。</p>
                         </div>
                       </div>
                     </div>
@@ -212,14 +237,27 @@ const AIAssistant = ({ isOpen, onClose, onRestaurantSelect, onMatchingOpen }) =>
                         <span>重新识别</span>
                       </button>
                       <button
-                        onClick={handleClose}
+                        onClick={handleRandomRestaurant}
+                        disabled={restaurants.length === 0}
                         className="px-3 py-2 bg-brand-primary text-white rounded-full hover:bg-brand-primaryHover transition-colors text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2"
                       >
-                        确定
+                        随机智选
                       </button>
                     </div>
                   )}
                 </div>
+
+                {!isListening && !showResult && (
+                  <button
+                    type="button"
+                    onClick={handleRandomRestaurant}
+                    disabled={restaurants.length === 0}
+                    className="flex w-full items-center justify-center gap-2 rounded-xl border border-brand-primarySoft bg-brand-paper py-3 text-sm font-semibold text-brand-primary transition-colors hover:bg-brand-primarySoft disabled:cursor-not-allowed disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                  >
+                    <Shuffle className="h-4 w-4" />
+                    从真实商家里随机智选
+                  </button>
+                )}
               </>
             )}
 

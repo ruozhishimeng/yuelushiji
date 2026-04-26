@@ -1,6 +1,6 @@
 import { ArrowLeft, Heart, Star, MapPin, ThumbsUp, Users as UsersIcon, Camera } from 'lucide-react';
 import ImageCarousel from './ImageCarousel';
-import React from 'react';
+import React, { memo } from 'react';
 import {
   formatAveragePrice,
   formatDistance,
@@ -14,13 +14,13 @@ const RestaurantDetail = ({ restaurant, onBack, onToggleFavorite, onToggleLike, 
   const popularDishes = restaurant.hotDishes || [];
 
   return (
-    <div className="flex flex-col h-full bg-white">
+    <div className="flex flex-col h-full bg-brand-paperSoft">
       <div className="flex-none relative h-48">
         <ImageCarousel restaurantName={restaurant.name} images={restaurant.photos} className="h-full" />
         <button
           onClick={onBack}
           aria-label="返回餐厅列表"
-          className="absolute left-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 shadow-sm transition-all duration-200 hover:bg-white focus:outline-none focus:ring-2 focus:ring-brand-primary"
+          className="absolute left-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-brand-paperSoft/90 shadow-sm transition-all duration-200 hover:bg-brand-paperSoft focus:outline-none focus:ring-2 focus:ring-brand-primary"
         >
           <ArrowLeft className="w-5 h-5 text-gray-700" />
         </button>
@@ -79,7 +79,7 @@ const RestaurantDetail = ({ restaurant, onBack, onToggleFavorite, onToggleLike, 
                   {formatAveragePrice(restaurant.avgPrice)}
                 </span>
                 {typeof restaurant.visitCount === 'number' ? (
-                  <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
+                  <span className="px-2 py-1 bg-brand-paper text-gray-600 text-xs rounded-full">
                     吃过 {restaurant.visitCount} 次
                   </span>
                 ) : null}
@@ -91,7 +91,7 @@ const RestaurantDetail = ({ restaurant, onBack, onToggleFavorite, onToggleLike, 
             </div>
           </div>
 
-          <div className="mb-3 p-2 bg-gray-50 rounded-lg">
+          <div className="mb-3 p-2 bg-brand-paper rounded-lg">
             <p className="text-sm text-gray-600">{restaurant.location}</p>
             {restaurant.tel && (
               <p className="text-xs text-gray-500 mt-1">电话：{restaurant.tel}</p>
@@ -115,14 +115,14 @@ const RestaurantDetail = ({ restaurant, onBack, onToggleFavorite, onToggleLike, 
           {popularDishes.length > 0 ? (
             <div className="grid grid-cols-2 gap-3">
               {popularDishes.map((dish, index) => (
-                <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div key={index} className="flex items-center justify-between p-3 bg-brand-paper rounded-lg">
                   <span className="font-medium text-gray-800">{dish.name}</span>
                   <span className="text-brand-primary font-bold">{dish.price}元</span>
                 </div>
               ))}
             </div>
           ) : (
-            <div className="p-3 bg-gray-50 rounded-lg text-sm text-gray-500">
+            <div className="p-3 bg-brand-paper rounded-lg text-sm text-gray-500">
               暂无真实菜品数据，后续可由学生打卡或商家信息补充。
             </div>
           )}
@@ -161,18 +161,18 @@ const RestaurantDetail = ({ restaurant, onBack, onToggleFavorite, onToggleLike, 
               ))}
             </div>
           ) : (
-            <div className="p-3 bg-gray-50 rounded-lg text-sm text-gray-500">
+            <div className="p-3 bg-brand-paper rounded-lg text-sm text-gray-500">
               暂无真实学生评价。当前商家信息来自高德 POI，评价体系需要接入学生打卡后生成。
             </div>
           )}
         </div>
       </div>
 
-      <div className="flex-none p-4 border-t border-gray-200 bg-white">
+      <div className="flex-none p-4 border-t border-brand-paperDeep bg-brand-paperSoft">
         <div className="flex space-x-2">
           <button
             onClick={() => onMatchingOpen(restaurant)}
-            className="flex-1 flex items-center justify-center space-x-2 py-3 bg-brand-primarySubtle text-brand-primary rounded-xl hover:bg-brand-primarySoft transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-brand-primary"
+            className="flex-1 flex items-center justify-center space-x-2 py-3 bg-brand-paper text-brand-primary rounded-xl hover:bg-brand-primarySoft transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-brand-primary"
           >
             <UsersIcon className="w-5 h-5" />
             <span>搭一搭</span>
@@ -182,7 +182,7 @@ const RestaurantDetail = ({ restaurant, onBack, onToggleFavorite, onToggleLike, 
               event.stopPropagation();
               onEvaluationOpen(restaurant);
             }}
-            className="relative z-20 flex-1 flex items-center justify-center space-x-2 rounded-xl bg-brand-primarySubtle py-3 text-brand-primary transition-colors duration-200 hover:bg-brand-primarySoft focus:outline-none focus:ring-2 focus:ring-brand-primary"
+            className="relative z-20 flex-1 flex items-center justify-center space-x-2 rounded-xl bg-brand-paper py-3 text-brand-primary transition-colors duration-200 hover:bg-brand-primarySoft focus:outline-none focus:ring-2 focus:ring-brand-primary"
           >
             <Camera className="w-5 h-5" />
             <span>打卡评价</span>
@@ -193,4 +193,4 @@ const RestaurantDetail = ({ restaurant, onBack, onToggleFavorite, onToggleLike, 
   );
 };
 
-export default RestaurantDetail;
+export default memo(RestaurantDetail);

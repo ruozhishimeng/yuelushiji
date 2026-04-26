@@ -1,5 +1,5 @@
 import { Heart, ImageOff, Star, MapPin, ThumbsUp, MessageCircle, Camera } from 'lucide-react';
-import React from 'react';
+import React, { memo } from 'react';
 import {
   formatAveragePrice,
   formatDistance,
@@ -32,11 +32,11 @@ const RestaurantCard = ({ restaurant, isSelected, onClick, onToggleFavorite, onT
       onKeyDown={handleCardKeyDown}
       className={`flex min-h-[124px] cursor-pointer gap-3 rounded-xl border p-3 transition-all duration-200 hover:border-brand-primarySoft hover:bg-brand-primarySubtle/50 hover:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 ${
         isSelected
-          ? 'border-brand-primary bg-brand-primarySubtle shadow-sm'
-          : 'border-gray-200 bg-white'
+          ? 'border-brand-primary bg-brand-paper shadow-sm'
+          : 'border-brand-paperDeep bg-brand-paperSoft'
       }`}
     >
-      <div className="h-24 w-24 flex-none overflow-hidden rounded-lg border border-gray-100 bg-brand-primarySubtle">
+      <div className="h-24 w-24 flex-none overflow-hidden rounded-lg border border-brand-paperDeep bg-brand-paper">
         {coverImage ? (
           <img
             src={coverImage}
@@ -97,25 +97,13 @@ const RestaurantCard = ({ restaurant, isSelected, onClick, onToggleFavorite, onT
           </span>
         </div>
 
-        <div className="mt-auto flex items-end justify-between gap-2 pt-2">
-          <div className="flex min-w-0 flex-wrap gap-1">
-            {(restaurant.tags || []).slice(0, 2).map((tag, index) => (
-              <span
-                key={index}
-                className="rounded-full bg-brand-primarySoft px-2 py-1 text-xs font-medium text-brand-primaryHover"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-
-          <div className="flex flex-none items-center gap-1">
+        <div className="mt-auto flex items-center justify-end gap-1 pt-2">
             <button
               onClick={handleToggleLike}
               aria-label={restaurant.isLiked ? '取消点赞' : '点赞'}
               className={`flex h-11 items-center gap-1 rounded-lg px-2 text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary ${
                 restaurant.isLiked
-                  ? 'bg-brand-primarySubtle text-brand-primary'
+                  ? 'bg-brand-paper text-brand-primary'
                   : 'text-gray-500 hover:bg-brand-primarySubtle hover:text-brand-primary'
               }`}
             >
@@ -144,11 +132,10 @@ const RestaurantCard = ({ restaurant, isSelected, onClick, onToggleFavorite, onT
             >
               <Camera className="h-4 w-4" />
             </button>
-          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default RestaurantCard;
+export default memo(RestaurantCard);

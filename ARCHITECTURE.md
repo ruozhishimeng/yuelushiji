@@ -12,38 +12,45 @@
 ```mermaid
 flowchart TD
   A["src/main.jsx"] --> B["src/App.jsx"]
-  B --> C["src/pages/Index.jsx"]
-  C --> D["useAmapRestaurants"]
-  D --> E["AMap JS API v2"]
-  D --> F["PlaceSearch POI"]
-  F --> G["poiAdapter.normalizePoi"]
-  G --> H["Restaurant[]"]
-  H --> I["MapSidebar"]
-  H --> J["Map markers"]
-  I --> K["RestaurantCard"]
-  I --> L["RestaurantDetail"]
-  C --> M["AI / Matching / Profile modals"]
-  M --> N["src/mocks/demoData.js"]
+  B --> C["src/pages/Index.jsx App Shell"]
+  C --> D["HomePage / MapPage / RankingPage / ProfilePage"]
+  C --> E["useAmapRestaurants"]
+  E --> F["AMap JS API v2"]
+  E --> G["PlaceSearch POI"]
+  G --> H["poiAdapter.normalizePoi"]
+  H --> I["Restaurant[]"]
+  I --> J["MapSidebar / RankingPanel / AIAssistant"]
+  J --> K["RestaurantCard / RestaurantDetail / Map markers"]
+  D --> L["src/mocks/demoData.js for demo-only pages"]
 ```
 
 ## 3. 分层职责
 
 ### 页面层
 
-`src/pages/Index.jsx` 只做页面编排：
+`src/pages/Index.jsx` 只做应用壳层和页面编排：
 
-- 调用 `useAmapRestaurants`。
-- 保存搜索、排序、分类、弹窗开关等 UI 状态。
-- 把餐厅数组、选中餐厅和回调传给子组件。
+- 维护 `activePage: home | map | ranking | profile`，默认进入首页社区流。
+- 调用 `useAmapRestaurants`，并只在地图页启用地图画布。
+- 保存搜索、排序、分类、AI、评价、饭搭子等全局 UI 状态。
+- 把同一份 `Restaurant[]` 传给地图、榜单和 AI 智选。
 
 页面层不应该直接写高德地图细节。
+
+页面组件职责：
+
+- `HomePage`：演示社区图文流和大学圈筛选。
+- `MapPage`：真实地图、地图侧栏、定位、marker 和餐厅详情。
+- `RankingPage`：基于真实 POI 的榜单页。
+- `ProfilePage`：个人中心演示页。
+- `BottomActionBar`：四个页面入口加中央 AI 全局动作。
 
 ### 地图数据层
 
 `src/hooks/useAmapRestaurants.js` 负责：
 
-- 加载高德 JS API。
-- 初始化和销毁地图实例。
+- 加载高德 JS API，并支持无地图 DOM 时先加载真实 POI。
+- 在 `mapEnabled` 为 true 时初始化和销毁地图实例。
 - 调用 `PlaceSearch` 搜索餐饮 POI。
 - 创建、更新、清理 marker。
 - 维护 `restaurants`、`selectedRestaurant`、`loading`、`error`。
@@ -121,6 +128,7 @@ flowchart TD
 
 允许 mock 的区域：
 
+- 首页社区图文卡片原型。
 - AI 助手演示回复。
 - 饭搭子匹配演示用户。
 - 个人中心演示足迹、标签、勋章。

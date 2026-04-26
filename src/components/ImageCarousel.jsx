@@ -20,7 +20,7 @@ const ImageCarousel = ({ restaurantName, images = [], className = '' }) => {
 
   if (validImages.length === 0) {
     return (
-      <div className={`h-32 rounded-lg bg-brand-primarySubtle border border-brand-primarySoft flex flex-col items-center justify-center text-brand-primary ${className}`}>
+      <div className={`h-32 rounded-lg bg-brand-paper border border-brand-paperDeep flex flex-col items-center justify-center text-brand-primary ${className}`}>
         <ImageOff className="w-8 h-8 mb-2" />
         <span className="text-xs font-medium">暂无真实图片</span>
       </div>
@@ -28,10 +28,10 @@ const ImageCarousel = ({ restaurantName, images = [], className = '' }) => {
   }
 
   return (
-    <div className={`relative h-32 rounded-lg overflow-hidden bg-gray-100 ${className}`}>
+    <div className={`relative h-32 rounded-lg overflow-hidden bg-brand-paper ${className}`}>
       <img
         src={validImages[currentIndex]}
-        alt={restaurantName}
+        alt={`${restaurantName} - 图片 ${currentIndex + 1}/${validImages.length}`}
         className="w-full h-full object-cover"
         loading="lazy"
       />

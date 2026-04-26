@@ -1,7 +1,7 @@
 # 并行工作流看板
 
 文档状态：协作看板  
-最后更新：2026-04-24
+最后更新：2026-04-25
 
 ## 1. 使用方式
 
@@ -27,8 +27,10 @@
 | WS-04 | 学生认证 MVP | Backlog | 未认领 | `UserProfile.jsx`, `PersonalCenter.jsx`, 未来 auth/API 层 | 明确校园邮箱、邀请码或人工审核方案 |
 | WS-05 | 饭搭子与 AI 演示隔离 | Review | 当前前端线程 | `AIAssistant.jsx`, `MatchingSystem.jsx`, `src/mocks/demoData.js` | 确认所有演示内容有明确标记 |
 | WS-06 | 本地环境与开发体验 | Blocked | 当前前端线程 | `README.md`, `RUNBOOK.md`, `scripts/dev-launcher.mjs` | 解决当前环境 dev server `listen UNKNOWN` 问题 |
-| WS-07 | 视觉与移动端主链路 QA | Ready | 未认领 | `src/pages/Index.jsx`, `src/components/*` | 跑桌面和移动视口截图，找遮挡、溢出、地图可见性问题 |
+| WS-07 | 视觉与移动端主链路 QA | Review | 当前前端线程 | `src/pages/Index.jsx`, `src/pages/*`, `src/components/*`, `src/index.css`, `tailwind.config.js` | 浏览器确认宣纸色背景、桌面/移动视口遮挡和地图可见性 |
 | WS-08 | PRD 产品方案细化 | Done | 产品经理智能体 + 子 Agent | `PRD.md`, `WORKSTREAMS.md` | 已完成严苛产品审查与 PRD 精修，后续按 v0.2 范围拆研发任务 |
+| WS-09 | 四页化前端基座 | Review | 当前前端线程 | `src/pages/*`, `BottomActionBar.jsx`, `AIAssistant.jsx`, `useAmapRestaurants.js` | 浏览器验证四页切换、AI、地图按需初始化 |
+| WS-10 | 前端优化方案审查 | Done | 当前前端线程 | `OPTIMIZATION.md` | 可按修订后的阶段 0 开始执行 |
 
 ## 3. 文件冲突区
 
@@ -93,3 +95,51 @@
 - 验证：`cmd.exe /c npm.cmd run build` 通过；`cmd.exe /c git diff --check` 通过，仅有仓库既有 LF/CRLF 换行提示。
 - 未完成：仍建议在浏览器里手动滑动左侧列表，确认悬浮滚动指示条出现/隐藏时不遮挡列表操作按钮。
 - 下一个 Agent 需要注意：`reviewCount` 是可选字段，只从 POI 真实字段或真实评价数组推导，不应填入演示数量。
+
+### 2026-04-25, 当前前端线程
+
+- 状态：Review
+- 已完成：将首页重构为四页应用壳层，默认进入社区图文流；底部导航改为 `首页 / 地图 / AI / 榜单 / 我的` 五槽结构，其中 AI 为中央全局动作；地图页保留真实 POI 主链路并改为按需初始化地图画布；榜单和 AI 智选复用同一份真实餐厅数组；我的页改为完整页面并移除右上角用户浮层入口；地图侧栏删除独立智选按钮，详情态不再显示品牌头图。
+- 改动文件：`src/pages/Index.jsx`, `src/pages/HomePage.jsx`, `src/pages/MapPage.jsx`, `src/pages/RankingPage.jsx`, `src/pages/ProfilePage.jsx`, `src/components/BottomActionBar.jsx`, `src/components/AIAssistant.jsx`, `src/components/MapSidebar.jsx`, `src/components/RestaurantCard.jsx`, `src/hooks/useAmapRestaurants.js`, `src/mocks/demoData.js`, `ARCHITECTURE.md`, `WORKSTREAMS.md`
+- 验证：`cmd.exe /c npm.cmd run build` 通过。
+- 未完成：仍需在浏览器中手动验证默认首页、底部切页、AI 智选跳地图、地图初始化、详情头图和移动端底部导航遮挡。
+- 下一个 Agent 需要注意：`CommunityPanel`、`FloatingPanel`、`SpinWheel`、`UserProfile` 等旧组件目前未在主入口引用，后续可在确认无回退需求后清理。
+
+### 2026-04-25, 当前前端线程
+
+- 状态：Review
+- 已完成：新增宣纸色设计 token，将全局 `background/card/popover`、页面根背景、首页卡片、榜单页、我的页、地图侧栏、餐厅卡片、详情页、底部导航、AI/社区/榜单/个人相关浮层和旧演示弹窗的主要底色统一切到暖宣纸体系；地图画布保持高德原生显示，不做染色。
+- 改动文件：`src/index.css`, `tailwind.config.js`, `src/pages/Index.jsx`, `src/pages/HomePage.jsx`, `src/pages/MapPage.jsx`, `src/pages/RankingPage.jsx`, `src/pages/ProfilePage.jsx`, `src/components/*`, `WORKSTREAMS.md`
+- 验证：`cmd.exe /c npm.cmd run build` 通过；`cmd.exe /c git diff --check` 通过，仅有仓库既有 LF/CRLF 换行提示。
+- 未完成：仍需浏览器视觉确认宣纸色在首页、地图侧栏、详情页、AI 浮层和移动端底部导航下的实际观感。
+- 下一个 Agent 需要注意：保留青绿主按钮、黄色评分/收藏等语义色；不要把高德地图 canvas 自身改成宣纸底。
+
+### 2026-04-26, 当前前端线程
+
+- 状态：Review
+- 已完成：对 `src/` 全量代码进行静态分析，输出 5 阶段 29 项优化方案文档 `OPTIMIZATION.md`，覆盖安全、性能、代码质量、可访问性、移动端和架构改进。
+- 改动文件：`OPTIMIZATION.md`（新建）、`WORKSTREAMS.md`
+- 验证：`cmd.exe /c npm.cmd run build` 通过；`cmd.exe /c git diff --check` 通过。
+- 未完成：方案待高级 Agent 审查确认后执行。
+- 下一个 Agent 需要注意：`OPTIMIZATION.md` 中每项优化都有具体文件位置、现状描述和验收标准，可按阶段分批执行；阶段一（安全）应最先推进。
+
+### 2026-04-26, 当前前端线程
+
+- 状态：Done
+- 已完成：审查并重写 `OPTIMIZATION.md`。保留高德密钥、违规 mock 数据、移动端、安全区、筛选可访问性、拥挤度误导等关键问题；修正 `vite.config.ts` 文件名错误；将 ESLint 从安全 P0 改为工程基线 P1；将批量删除依赖和 shadcn/ui 组件降级为 P3；明确性能优化必须先实测；移除文档中的明文密钥。
+- 改动文件：`OPTIMIZATION.md`, `WORKSTREAMS.md`
+- 验证：`cmd.exe /c git diff --check` 通过，仅有仓库既有 LF/CRLF 换行提示；已检查 `OPTIMIZATION.md` 和 `WORKSTREAMS.md` 不含明文密钥前缀。
+- 未完成：尚未执行优化方案本身；建议下一步先做阶段 0：移除高德密钥 fallback、删除或隔离 `src/data/restaurants.js`。
+- 下一个 Agent 需要注意：不要按旧方案直接批量卸载依赖或删除 ui 组件；必须先做 import graph 和构建验证。
+
+### 2026-04-26, 当前前端线程
+
+- 状态：Done
+- 已完成：
+  1. **7 阶段优化全覆盖执行**：阶段 0（高德密钥移至 .env、删除违规 mock 和 5 个旧组件）、阶段 1（.eslintrc.cjs、Vite port/alias 修正、Tailwind content 修正）、阶段 2（lang=zh-CN、标题、视口 100vh→dvh、安全区、筛选菜单 ARIA、prefers-reduced-motion、图片 alt）、阶段 3（getBusyStatus 修复、演示常量集中）、阶段 4（弹窗条件挂载、memo、Marker 增量更新、滚动 ref 优化、代码分割）、阶段 5（useAmapRestaurants 拆分为 4 子 hook、MapSidebar 拆分为 3 子组件、API 层骨架）、阶段 6（卸载 framer-motion/recharts/axios/supabase/html-to-image/vaul/cmdk/input-otp/react-resizable-panels、删除 48 个未使用 ui 组件）。
+  2. **个人界面重设计**：去掉头像卡片边框改为悬浮设计；顶部加粉丝/点赞/关注+品食段位；游戏标签改为打卡/评价/探店统计；增加搭一搭历史记录；右侧加个人资料编辑入口+悬浮编辑小窗（头像/昵称/学校/认证状态）；收藏光临条目去边框改分割线、去红心、右侧显示去过次数；收藏/光临优先使用高德 POI 真实数据、无数据回落到 demo。
+  3. **lint 零错误**：修复 ESLint 配置（移除不兼容的 react-refresh）、清理所有 unused vars 和转义实体。
+- 改动文件：`src/lib/amap/config.js`, `.env`, `.env.example`, `.gitignore`, `.eslintrc.cjs`, `vite.config.js`, `tailwind.config.js`, `package.json`, `index.html`, `src/index.css`, `src/pages/Index.jsx`, `src/pages/ProfilePage.jsx`, `src/pages/MapPage.jsx`, `src/hooks/useAmapRestaurants.js`, `src/hooks/useAmapLoader.js`（新建）、`src/hooks/useMapInstance.js`（新建）、`src/hooks/usePlaceSearch.js`（新建）、`src/hooks/useMarkers.js`（新建）、`src/components/MapSidebar.jsx`, `src/components/MapSidebarHeader.jsx`（新建）、`src/components/FilterMenu.jsx`（新建）、`src/components/RestaurantList.jsx`（新建）、`src/components/AIAssistant.jsx`, `src/components/BottomActionBar.jsx`, `src/components/RestaurantCard.jsx`, `src/components/RestaurantDetail.jsx`, `src/components/ImageCarousel.jsx`, `src/components/RankingPanel.jsx`, `src/lib/restaurants/display.js`, `src/lib/api/client.js`（新建）、`src/lib/api/restaurantApi.js`（新建）、`src/lib/api/reviewApi.js`（新建）、`src/lib/api/authApi.js`（新建）、`src/lib/api/checkinApi.js`（新建）、`src/mocks/demoData.js`, `WORKSTREAMS.md`
+- 验证：`npm run build` 通过；`npm run lint` 零错误零警告；`git diff --check` 仅有仓库既有 LF/CRLF 提示。
+- 构建产物对比：JS 主包 gzip 从 114KB→62KB（-46%），CSS gzip 从 10.5KB→6.8KB（-35%），node_modules 减少 61 个包，ui 组件从 48 个→2 个。
+- 未完成：仍需浏览器手动验证地图加载、四页切换、收藏/点赞联动、AI 弹窗、移动端安全区和重叠。

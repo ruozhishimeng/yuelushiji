@@ -1,5 +1,5 @@
-export const AMAP_KEY = import.meta.env.VITE_AMAP_KEY || 'c1617a9d317899255334f785a56ea4dd';
-export const AMAP_SECURITY_CODE = import.meta.env.VITE_AMAP_SECURITY_CODE || '9d1d335ba923a3d566030b77f413872a';
+export const AMAP_KEY = import.meta.env.VITE_AMAP_KEY;
+export const AMAP_SECURITY_CODE = import.meta.env.VITE_AMAP_SECURITY_CODE;
 
 export const YUELU_CENTER = [112.93, 28.17];
 export const SEARCH_RADIUS = 3000;

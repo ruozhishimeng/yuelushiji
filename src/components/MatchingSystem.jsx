@@ -60,7 +60,7 @@ const MatchingSystem = ({ isOpen, onClose, targetRestaurant = null }) => {
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white/95 backdrop-blur-md rounded-2xl max-w-md w-full max-h-[90vh] overflow-hidden shadow-xl">
+      <div className="bg-brand-paperSoft/95 backdrop-blur-md rounded-2xl max-w-md w-full max-h-[90vh] overflow-hidden shadow-xl">
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-brand-primary rounded-full flex items-center justify-center">
@@ -69,7 +69,7 @@ const MatchingSystem = ({ isOpen, onClose, targetRestaurant = null }) => {
             <div>
               <div className="flex items-center space-x-2">
                 <h2 className="text-xl font-bold text-gray-800">搭一搭</h2>
-                <span className="px-2 py-0.5 bg-gray-100 text-gray-500 text-xs rounded-full">演示功能</span>
+                <span className="px-2 py-0.5 bg-brand-paper text-gray-500 text-xs rounded-full">演示功能</span>
               </div>
               <div className="flex items-center space-x-1">
                 <MapPin className="w-3 h-3 text-gray-500" />
@@ -85,7 +85,7 @@ const MatchingSystem = ({ isOpen, onClose, targetRestaurant = null }) => {
           <button
             onClick={onClose}
             aria-label="关闭饭搭子匹配"
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-brand-primary"
+            className="p-2 hover:bg-brand-paper rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-brand-primary"
           >
             <X className="w-5 h-5 text-gray-500" />
           </button>
@@ -104,7 +104,7 @@ const MatchingSystem = ({ isOpen, onClose, targetRestaurant = null }) => {
                       className={`flex-1 py-3 px-4 rounded-2xl font-medium transition-all duration-300 ${
                         preferences.people === option
                           ? 'bg-brand-primary text-white shadow-md'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                          : 'bg-brand-paper text-gray-700 hover:bg-brand-paperDeep'
                       }`}
                     >
                       {option}
@@ -123,7 +123,7 @@ const MatchingSystem = ({ isOpen, onClose, targetRestaurant = null }) => {
                       className={`flex items-center space-x-2 py-3 px-4 rounded-2xl font-medium transition-all duration-300 ${
                         preferences.tastes.includes(option.key)
                           ? 'bg-brand-primary text-white shadow-md'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                          : 'bg-brand-paper text-gray-700 hover:bg-brand-paperDeep'
                       }`}
                     >
                       <span className="text-sm font-semibold">{option.icon}</span>
@@ -143,7 +143,7 @@ const MatchingSystem = ({ isOpen, onClose, targetRestaurant = null }) => {
                       className={`w-full py-4 px-4 rounded-2xl font-medium text-left transition-all duration-300 ${
                         preferences.purpose === option.label
                           ? 'bg-brand-primary text-white shadow-md'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                          : 'bg-brand-paper text-gray-700 hover:bg-brand-paperDeep'
                       }`}
                     >
                       <div className="flex items-center space-x-3">
@@ -201,7 +201,7 @@ const MatchingSystem = ({ isOpen, onClose, targetRestaurant = null }) => {
               </div>
 
               {matchedUsers.map(user => (
-                <div key={user.id} className="bg-gray-50 rounded-2xl p-4 animate-slide-up">
+                <div key={user.id} className="bg-brand-paper rounded-2xl p-4 animate-slide-up">
                   <div className="flex items-center space-x-4">
                     <div className="w-12 h-12 rounded-full bg-brand-primary text-white flex items-center justify-center font-bold">
                       {user.name.charAt(0)}
@@ -243,7 +243,7 @@ const MatchingSystem = ({ isOpen, onClose, targetRestaurant = null }) => {
               <div className="flex space-x-3">
                 <button
                   onClick={handleReset}
-                  className="flex-1 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors"
+                  className="flex-1 py-3 border border-brand-paperDeep text-gray-700 rounded-xl hover:bg-brand-paper transition-colors"
                 >
                   重新匹配
                 </button>

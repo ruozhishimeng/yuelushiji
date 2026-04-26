@@ -46,14 +46,14 @@ const EvaluationModal = ({ restaurant, isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[1000] p-4">
-      <div className="bg-white rounded-2xl max-w-md w-full max-h-[90vh] overflow-hidden shadow-xl">
+      <div className="bg-brand-paperSoft rounded-2xl max-w-md w-full max-h-[90vh] overflow-hidden shadow-xl">
         {/* 头部 */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <h2 className="text-2xl font-bold text-gray-800">打卡评价</h2>
           <button
             onClick={onClose}
             aria-label="关闭打卡评价"
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-brand-primary"
+            className="p-2 hover:bg-brand-paper rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-brand-primary"
           >
             <X className="w-6 h-6 text-gray-500" />
           </button>
@@ -62,7 +62,7 @@ const EvaluationModal = ({ restaurant, isOpen, onClose }) => {
         {/* 内容区域 */}
         <div className="overflow-y-auto max-h-[70vh] p-6 space-y-6">
           {/* 餐厅信息 */}
-          <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-xl">
+          <div className="flex items-center space-x-3 p-3 bg-brand-paper rounded-xl">
             {restaurant.photos?.[0] ? (
               <img
                 src={restaurant.photos[0]}
@@ -70,7 +70,7 @@ const EvaluationModal = ({ restaurant, isOpen, onClose }) => {
                 className="w-12 h-12 rounded-lg mx-auto object-cover"
               />
             ) : (
-              <div className="w-12 h-12 rounded-lg bg-brand-primarySubtle text-brand-primary flex items-center justify-center">
+              <div className="w-12 h-12 rounded-lg bg-brand-paper text-brand-primary flex items-center justify-center">
                 <Camera className="w-5 h-5" />
               </div>
             )}
