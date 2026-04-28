@@ -4,11 +4,15 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "npm run dev:all",
+    "dev:client": "vite --port 5173",
+    "dev:server": "node server/index.js",
+    "dev:all": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "seed": "node server/db/seed.js"
   },
   "dependencies": {
     "@amap/amap-jsapi-loader": "^1.0.1",
@@ -64,6 +68,7 @@
     "@types/react-dom": "^18.2.19",
     "@vitejs/plugin-react": "4.3.4",
     "autoprefixer": "^10.4.19",
+    "concurrently": "^9.2.1",
     "eslint": "^8.56.0",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",

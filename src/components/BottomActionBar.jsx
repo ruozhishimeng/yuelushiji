@@ -30,7 +30,7 @@ const BottomActionBar = ({ activePage, onPageChange, onAiOpen, isAiOpen }) => {
         }`}
       >
         <Icon className="h-5 w-5" />
-        <span>{item.label}</span>
+        <span className="font-ui-kaiti">{item.label}</span>
       </button>
     );
   };
@@ -56,7 +56,7 @@ const BottomActionBar = ({ activePage, onPageChange, onAiOpen, isAiOpen }) => {
           >
             <span className="absolute inset-0 rounded-2xl bg-white/10" />
             <Bot className="relative h-7 w-7" />
-            <span className="absolute -bottom-5 text-xs font-bold text-brand-primary">AI</span>
+            <span className="font-ui-kaiti absolute -bottom-5 text-xs font-bold text-brand-primary">AI</span>
           </button>
 
           <div className="flex min-w-0 gap-1">

@@ -3,8 +3,9 @@ import MatchingSystem from '../components/MatchingSystem';
 import ReviewModal from '../components/ReviewModal';
 import AIAssistant from '../components/AIAssistant';
 import BottomActionBar from '../components/BottomActionBar';
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAmapRestaurants } from '../hooks/useAmapRestaurants';
+import { useFavorites } from '../hooks/useFavorites';
 import HomePage from './HomePage';
 import MapPage from './MapPage';
 import ProfilePage from './ProfilePage';
@@ -18,6 +19,7 @@ const Index = () => {
   const [isAiOpen, setIsAiOpen] = useState(false);
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [showMatchingSystem, setShowMatchingSystem] = useState(false);
+  const [matchingContext, setMatchingContext] = useState({ source: "map", targetRestaurant: null, initialView: "composer" });
   const [showEvaluationModal, setShowEvaluationModal] = useState(false);
   const [selectedReviewRestaurant, setSelectedReviewRestaurant] = useState(null);
   const [selectedEvaluationRestaurant, setSelectedEvaluationRestaurant] = useState(null);
@@ -43,6 +45,21 @@ const Index = () => {
     mapEnabled: activePage === 'map'
   });
 
+  const { toggleFavorite: toggleFavoriteRemote, syncFromRestaurants } = useFavorites();
+
+  // Sync restaurant isFavorite state into useFavorites when restaurants load/change
+  useEffect(() => {
+    if (restaurants.length > 0) {
+      syncFromRestaurants(restaurants);
+    }
+  }, [restaurants, syncFromRestaurants]);
+
+  // Wrap toggleFavorite to call both the API hook AND the local UI toggle
+  const handleToggleFavorite = useCallback((restaurantId) => {
+    toggleFavoriteRemote(restaurantId);
+    toggleFavorite(restaurantId);
+  }, [toggleFavorite, toggleFavoriteRemote]);
+
   const handlePageChange = (page) => {
     setActivePage(page);
     setIsAiOpen(false);
@@ -60,11 +77,19 @@ const Index = () => {
     setIsAiOpen(false);
   };
 
-  const handleMatchingOpen = (restaurant = null) => {
-    if (restaurant) {
-      focusRestaurant(restaurant);
-      setActivePage('map');
+  const handleMatchingOpen = (context = {}) => {
+    const nextContext = {
+      source: context.source || (context.targetRestaurant ? "restaurant" : "map"),
+      targetRestaurant: context.targetRestaurant || null,
+      initialView: context.initialView || "composer",
+    };
+
+    if (nextContext.targetRestaurant) {
+      focusRestaurant(nextContext.targetRestaurant);
+      setActivePage("map");
     }
+
+    setMatchingContext(nextContext);
     setShowMatchingSystem(true);
     setIsAiOpen(false);
   };
@@ -90,7 +115,7 @@ const Index = () => {
           onCategoryFilter={setActiveCategory}
           onRestaurantSelect={focusRestaurant}
           onBackToList={() => setSelectedRestaurant(null)}
-          onToggleFavorite={toggleFavorite}
+          onToggleFavorite={handleToggleFavorite}
           onToggleLike={toggleLike}
           onViewReviews={handleViewReviews}
           onMatchingOpen={handleMatchingOpen}
@@ -120,13 +145,19 @@ const Index = () => {
       return (
         <ProfilePage
           restaurants={restaurants}
-          onToggleFavorite={toggleFavorite}
+          onToggleFavorite={handleToggleFavorite}
           onRestaurantSelect={handleRestaurantSelect}
         />
       );
     }
 
-    return <HomePage />;
+    return (
+      <HomePage
+        restaurants={restaurants}
+        poiLoading={poiLoading}
+        onRestaurantSelect={handleRestaurantSelect}
+      />
+    );
   };
 
   return (
@@ -154,7 +185,8 @@ const Index = () => {
         <MatchingSystem
           isOpen={showMatchingSystem}
           onClose={() => setShowMatchingSystem(false)}
-          targetRestaurant={selectedRestaurant}
+          matchingContext={matchingContext}
+          restaurants={restaurants}
         />
       )}
 

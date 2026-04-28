@@ -75,7 +75,7 @@ const FilterMenu = ({ searchTerm, sortBy, activeCategory, onSearchChange, onSort
                 role="menu"
                 className="absolute right-0 top-full mt-2 w-64 bg-brand-paperSoft rounded-xl shadow-xl border border-brand-paperDeep overflow-hidden z-[1000]">
                 <div className="p-2">
-                  <h4 className="text-sm font-medium text-gray-700 mb-2">排序方式</h4>
+                  <h4 className="font-ui-kaiti mb-2 text-sm font-medium text-gray-700">排序方式</h4>
                   {SORT_OPTIONS.map(([value, label]) => (
                     <button
                       key={value}
@@ -92,14 +92,14 @@ const FilterMenu = ({ searchTerm, sortBy, activeCategory, onSearchChange, onSort
                 </div>
 
                 <div className="border-t border-brand-paperDeep p-2">
-                  <h4 className="text-sm font-medium text-gray-700 mb-2">状态筛选</h4>
+                  <h4 className="font-ui-kaiti mb-2 text-sm font-medium text-gray-700">状态筛选</h4>
                   <div className="px-3 py-2 rounded-lg text-sm text-gray-400">
                     待接入实时排队数据
                   </div>
                 </div>
 
                 <div className="border-t border-brand-paperDeep p-2">
-                  <h4 className="text-sm font-medium text-gray-700 mb-2">美食分类</h4>
+                  <h4 className="font-ui-kaiti mb-2 text-sm font-medium text-gray-700">美食分类</h4>
                   <div className="space-y-1">
                     {CATEGORY_OPTIONS.map(([value, label]) => (
                       <button

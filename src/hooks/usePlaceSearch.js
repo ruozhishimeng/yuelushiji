@@ -15,7 +15,7 @@ export const usePlaceSearch = ({ loadAmap, mapInstanceRef }) => {
     Array.isArray(center) ? center : [center.lng, center.lat]
   );
 
-  const searchRestaurants = useCallback(async (forcedCenter = null, clearMarkers, replaceRestaurants, createMarkers, applyUiState) => {
+  const searchRestaurants = useCallback(async (forcedCenter = null, clearMarkers, replaceRestaurants, createMarkers, applyUiState, onResults) => {
     setPoiLoading(true);
 
     try {
@@ -33,6 +33,7 @@ export const usePlaceSearch = ({ loadAmap, mapInstanceRef }) => {
         if (status !== 'complete' || !result?.poiList?.pois?.length) {
           clearMarkers();
           replaceRestaurants([]);
+          onResults?.([], centerCoords);
           return;
         }
 
@@ -40,6 +41,7 @@ export const usePlaceSearch = ({ loadAmap, mapInstanceRef }) => {
         const nextWithUiState = nextRestaurants.map(applyUiState);
         replaceRestaurants(nextRestaurants);
         createMarkers(nextWithUiState);
+        onResults?.(nextWithUiState, centerCoords);
       });
     } catch (error) {
       console.error('商家数据加载失败:', error);

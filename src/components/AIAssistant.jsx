@@ -4,7 +4,8 @@ import {
   formatAveragePrice,
   formatDistance
 } from '../lib/restaurants/display';
-import { DEMO_VOICE_BAR_HEIGHTS } from '../mocks/demoData';
+
+const VOICE_BAR_HEIGHTS = [22, 34, 46, 30, 40];
 
 const DEMO_TRANSCRIPT = '正在解析你的美食需求...';
 
@@ -60,7 +61,7 @@ const AIAssistant = ({ isOpen, restaurants = [], onClose, onRestaurantSelect, on
   };
 
   const handleMatchingClick = () => {
-    onMatchingOpen(null);
+    onMatchingOpen({ source: "ai", targetRestaurant: null, initialView: "composer" });
     handleClose();
   };
 
@@ -138,7 +139,7 @@ const AIAssistant = ({ isOpen, restaurants = [], onClose, onRestaurantSelect, on
                           key={i}
                           className="w-2 bg-brand-primary rounded-full animate-pulse"
                           style={{
-                            height: `${DEMO_VOICE_BAR_HEIGHTS[i]}px`,
+                            height: `${VOICE_BAR_HEIGHTS[i]}px`,
                             animationDelay: `${i * 0.1}s`,
                             animationDuration: '1.5s'
                           }}
@@ -264,8 +265,8 @@ const AIAssistant = ({ isOpen, restaurants = [], onClose, onRestaurantSelect, on
             {activeTab === 'matching' && (
               <div className="text-center space-y-4">
                 <div className="space-y-2">
-                  <p className="text-sm font-medium text-gray-700">寻找志同道合的饭搭子</p>
-                  <p className="text-xs text-gray-500">演示入口，真实匹配服务待接入</p>
+                  <p className="text-sm font-medium text-gray-700">先配置偏好，再看附近谁在等搭子</p>
+                  <p className="text-xs text-gray-500">从这里会直接进入搭一搭配置界面，不再停留空白入口页</p>
                 </div>
 
                 <button
@@ -273,7 +274,7 @@ const AIAssistant = ({ isOpen, restaurants = [], onClose, onRestaurantSelect, on
                   className="w-full flex items-center justify-center space-x-2 py-3 bg-brand-primary text-white rounded-xl hover:bg-brand-primaryHover transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2"
                 >
                   <Users className="w-5 h-5" />
-                  <span>开始搭一搭</span>
+                  <span>去配置搭一搭</span>
                 </button>
               </div>
             )}

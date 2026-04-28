@@ -7,7 +7,7 @@ import {
   formatReviewCount
 } from '../lib/restaurants/display';
 
-const RestaurantCard = ({ restaurant, isSelected, onClick, onToggleFavorite, onToggleLike, onMatchingOpen, onEvaluationOpen }) => {
+const RestaurantCard = ({ restaurant, variant = 'default', isSelected, onClick, onToggleFavorite, onToggleLike, onMatchingOpen, onEvaluationOpen }) => {
   const coverImage = Array.isArray(restaurant.photos)
     ? restaurant.photos.find(Boolean)
     : null;
@@ -18,11 +18,88 @@ const RestaurantCard = ({ restaurant, isSelected, onClick, onToggleFavorite, onT
   };
 
   const handleCardKeyDown = (event) => {
+    if (!onClick) return;
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       onClick();
     }
   };
+
+  if (variant === 'compact') {
+    const interactiveProps = onClick
+      ? {
+          role: 'button',
+          tabIndex: 0,
+          onClick,
+          onKeyDown: handleCardKeyDown
+        }
+      : {};
+
+    return (
+      <div
+        {...interactiveProps}
+        className={`flex min-h-[92px] gap-3 rounded-xl border border-brand-paperDeep bg-brand-paperSoft p-3 transition-colors ${
+          onClick
+            ? 'cursor-pointer hover:border-brand-primarySoft hover:bg-brand-primarySubtle/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2'
+            : ''
+        }`}
+      >
+        <div className="h-[76px] w-[76px] flex-none overflow-hidden rounded-lg bg-brand-paper">
+          {coverImage ? (
+            <img
+              src={coverImage}
+              alt={restaurant.name}
+              className="h-full w-full object-cover"
+              loading="lazy"
+            />
+          ) : (
+            <div className="flex h-full w-full flex-col items-center justify-center text-brand-primary/65">
+              <Camera className="mb-0.5 h-5 w-5" />
+              <span className="text-[10px] font-medium">无图</span>
+            </div>
+          )}
+        </div>
+
+        <div className="flex min-w-0 flex-1 flex-col justify-center">
+          <div className="flex items-start justify-between gap-2">
+            <h4 className="line-clamp-1 text-sm font-semibold text-gray-900">
+              {restaurant.name}
+            </h4>
+            <span className="flex flex-none items-center gap-0.5 text-xs font-semibold text-brand-warning">
+              <Star className="h-3.5 w-3.5 fill-current" />
+              {restaurant.rating || '暂无'}
+            </span>
+          </div>
+
+          <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-gray-500">
+            <span>{formatReviewCount(restaurant)}</span>
+            <span className="font-semibold text-brand-primary">
+              {formatAveragePrice(restaurant.avgPrice)}
+            </span>
+            <span>{formatPriceLevel(restaurant.priceLevel)}</span>
+          </div>
+
+          <div className="mt-1 flex min-w-0 items-center gap-1 text-xs text-gray-500">
+            <MapPin className="h-3.5 w-3.5 flex-none text-gray-400" />
+            <span className="line-clamp-1">
+              {formatDistance(restaurant.distance)} · {restaurant.location}
+            </span>
+          </div>
+
+          <div className="mt-1 flex flex-wrap gap-1">
+            {(restaurant.tags || []).slice(0, 2).map((tag, index) => (
+              <span
+                key={`${restaurant.id}-compact-tag-${index}`}
+                className="rounded-full bg-brand-paper px-2 py-0.5 text-[11px] font-medium text-brand-primary"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -98,40 +175,40 @@ const RestaurantCard = ({ restaurant, isSelected, onClick, onToggleFavorite, onT
         </div>
 
         <div className="mt-auto flex items-center justify-end gap-1 pt-2">
-            <button
-              onClick={handleToggleLike}
-              aria-label={restaurant.isLiked ? '取消点赞' : '点赞'}
-              className={`flex h-11 items-center gap-1 rounded-lg px-2 text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary ${
-                restaurant.isLiked
-                  ? 'bg-brand-paper text-brand-primary'
-                  : 'text-gray-500 hover:bg-brand-primarySubtle hover:text-brand-primary'
-              }`}
-            >
-              <ThumbsUp className={`h-4 w-4 ${restaurant.isLiked ? 'fill-current' : ''}`} />
-              <span>{restaurant.likes || 0}</span>
-            </button>
-            <button
-              onClick={(event) => {
-                event.stopPropagation();
-                onMatchingOpen(restaurant);
-              }}
-              aria-label={`为${restaurant.name}找饭搭子`}
-              title="搭一搭"
-              className="flex h-11 w-11 items-center justify-center rounded-lg text-brand-primary transition-colors hover:bg-brand-primarySubtle focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary"
-            >
-              <MessageCircle className="h-4 w-4" />
-            </button>
-            <button
-              onClick={(event) => {
-                event.stopPropagation();
-                onEvaluationOpen(restaurant);
-              }}
-              aria-label={`为${restaurant.name}打卡评价`}
-              title="打卡评价"
-              className="flex h-11 w-11 items-center justify-center rounded-lg text-brand-primary transition-colors hover:bg-brand-primarySubtle focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary"
-            >
-              <Camera className="h-4 w-4" />
-            </button>
+          <button
+            onClick={handleToggleLike}
+            aria-label={restaurant.isLiked ? '取消点赞' : '点赞'}
+            className={`flex h-11 items-center gap-1 rounded-lg px-2 text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary ${
+              restaurant.isLiked
+                ? 'bg-brand-paper text-brand-primary'
+                : 'text-gray-500 hover:bg-brand-primarySubtle hover:text-brand-primary'
+            }`}
+          >
+            <ThumbsUp className={`h-4 w-4 ${restaurant.isLiked ? 'fill-current' : ''}`} />
+            <span>{restaurant.likes || 0}</span>
+          </button>
+          <button
+            onClick={(event) => {
+              event.stopPropagation();
+              onMatchingOpen({ source: "restaurant", targetRestaurant: restaurant, initialView: "composer" });
+            }}
+            aria-label={`为${restaurant.name}找饭搭子`}
+            title="搭一搭"
+            className="flex h-11 w-11 items-center justify-center rounded-lg text-brand-primary transition-colors hover:bg-brand-primarySubtle focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary"
+          >
+            <MessageCircle className="h-4 w-4" />
+          </button>
+          <button
+            onClick={(event) => {
+              event.stopPropagation();
+              onEvaluationOpen(restaurant);
+            }}
+            aria-label={`为${restaurant.name}打卡评价`}
+            title="打卡评价"
+            className="flex h-11 w-11 items-center justify-center rounded-lg text-brand-primary transition-colors hover:bg-brand-primarySubtle focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary"
+          >
+            <Camera className="h-4 w-4" />
+          </button>
         </div>
       </div>
     </div>

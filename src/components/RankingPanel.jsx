@@ -5,7 +5,6 @@ import {
   formatDistance,
   formatReviewCount
 } from '../lib/restaurants/display';
-import { demoDishes, demoLocations, demoRankingSubTags } from '../mocks/demoData';
 
 const RANKING_TABS = [
   { key: 'hot', label: '热门榜', icon: Flame, color: 'text-orange-500' },
@@ -15,6 +14,13 @@ const RANKING_TABS = [
 ];
 
 const CATEGORIES = ['江湖美食', '佳饮甜点'];
+
+const LOCATIONS = ['全大学城', '麓山南路', '阜埠河', '后湖小区', '天马公寓', '左家垅'];
+
+const RANKING_SUB_TAGS = {
+  '江湖美食': ['湘菜', '川菜', '快餐', '简餐', '烧烤', '小吃', '长沙特色', '面馆', '盖码饭'],
+  '佳饮甜点': ['奶茶', '果茶', '甜品', '冰品', '咖啡', '豆花', '双皮奶', '柠檬茶']
+};
 
 const toNumber = (value, fallback) => {
   const numeric = Number.parseFloat(value);
@@ -36,13 +42,13 @@ const sortRestaurants = (list, ranking) => {
 };
 
 const RankingPanel = ({ restaurants, onRestaurantSelect }) => {
-  const [activeLocation, setActiveLocation] = useState(demoLocations[0]);
+  const [activeLocation, setActiveLocation] = useState(LOCATIONS[0]);
   const [activeRanking, setActiveRanking] = useState('hot');
   const [activeCategory, setActiveCategory] = useState(CATEGORIES[0]);
   const [expandedTags, setExpandedTags] = useState(false);
   const [activeTag, setActiveTag] = useState('');
 
-  const subTags = demoRankingSubTags[activeCategory] || [];
+  const subTags = RANKING_SUB_TAGS[activeCategory] || [];
   const visibleTags = expandedTags ? subTags : subTags.slice(0, 4);
   const isItemRanking = activeRanking === 'item';
 
@@ -64,10 +70,18 @@ const RankingPanel = ({ restaurants, onRestaurantSelect }) => {
 
   const filteredDishes = useMemo(() => {
     if (!isItemRanking) return [];
-    return demoDishes
+    const dishesFromRestaurants = (restaurants || []).map(r => ({
+      id: r.id,
+      name: r.name + ' 招牌菜',
+      restaurant: r.name,
+      heat: r.reviewCount || 0,
+      price: r.avgPrice,
+      tag: r.category
+    }));
+    return dishesFromRestaurants
       .filter(d => !activeTag || d.tag === activeTag)
       .sort((a, b) => b.heat - a.heat);
-  }, [isItemRanking, activeTag]);
+  }, [isItemRanking, activeTag, restaurants]);
 
   const displayList = isItemRanking ? filteredDishes : filteredRestaurants;
   const rankName = RANKING_TABS.find(t => t.key === activeRanking)?.label || '';
@@ -82,7 +96,7 @@ const RankingPanel = ({ restaurants, onRestaurantSelect }) => {
       <div className="flex w-[104px] flex-none flex-col gap-3">
         {/* 地区选择 */ }
         <div className="space-y-1">
-          {demoLocations.map((loc) => (
+          {LOCATIONS.map((loc) => (
             <button
               key={loc}
               onClick={() => setActiveLocation(loc)}
@@ -180,8 +194,8 @@ const RankingPanel = ({ restaurants, onRestaurantSelect }) => {
         {/* 商家列表 / 菜品列表 */ }
         {displayList.length === 0 ? (
           <div className="rounded-2xl bg-brand-paperSoft py-12 text-center">
-            <Star className="mx-auto mb-2 h-8 w-8 text-gray-300" />
-            <p className="text-sm text-gray-500">暂无符合条件的{isItemRanking ? '单品' : '商家'}</p>
+            <MapPin className="mx-auto mb-2 h-8 w-8 text-gray-300" />
+            <p className="text-sm text-gray-500">该区域暂无餐厅数据</p>
           </div>
         ) : (
           <div className="rounded-2xl bg-brand-paperSoft p-3">

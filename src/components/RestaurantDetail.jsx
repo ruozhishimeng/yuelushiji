@@ -171,7 +171,7 @@ const RestaurantDetail = ({ restaurant, onBack, onToggleFavorite, onToggleLike, 
       <div className="flex-none p-4 border-t border-brand-paperDeep bg-brand-paperSoft">
         <div className="flex space-x-2">
           <button
-            onClick={() => onMatchingOpen(restaurant)}
+            onClick={() => onMatchingOpen({ source: "restaurant", targetRestaurant: restaurant, initialView: "composer" })}
             className="flex-1 flex items-center justify-center space-x-2 py-3 bg-brand-paper text-brand-primary rounded-xl hover:bg-brand-primarySoft transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-brand-primary"
           >
             <UsersIcon className="w-5 h-5" />

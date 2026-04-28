@@ -92,7 +92,7 @@ const MapPage = ({
 
       <div className="absolute bottom-24 right-4 z-20 flex items-center space-x-3 sm:bottom-28">
         <button
-          onClick={() => onMatchingOpen(null)}
+          onClick={() => onMatchingOpen({ source: "map", targetRestaurant: null, initialView: "composer" })}
           aria-label="打开饭搭子匹配"
           className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-paperSoft shadow-md transition-all duration-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-brand-primary"
         >

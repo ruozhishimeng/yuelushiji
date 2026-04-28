@@ -1,7 +1,7 @@
 # 运行与排错手册
 
 文档状态：开发运行手册  
-最后更新：2026-04-22
+最后更新：2026-04-27
 
 ## 1. 推荐环境
 
@@ -18,16 +18,42 @@ F:\yuelushiji
 
 ## 2. 常用命令
 
-安装依赖：
+安装根目录依赖：
 
 ```bash
 npm install
 ```
 
-启动开发服务器：
+安装后端依赖（首次拉起后端或切换 Windows/WSL 环境后建议执行一次）：
+
+```bash
+cd server
+npm install
+```
+
+启动前后端开发服务：
 
 ```bash
 npm run dev
+```
+
+仅启动前端：
+
+```bash
+npm run dev:client
+```
+
+仅启动后端：
+
+```bash
+npm run dev:server
+```
+
+如果在 WSL 中启动后端出现 `better-sqlite3 ... invalid ELF header`，说明 `server/node_modules` 是在另一个平台安装的，执行：
+
+```bash
+cd server
+npm rebuild better-sqlite3 --build-from-source
 ```
 
 构建：

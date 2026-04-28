@@ -3,7 +3,18 @@ import { MAP_OPTIONS, YUELU_CENTER } from '../lib/amap/config';
 
 const MOVE_SEARCH_DEBOUNCE_MS = 450;
 
-export const useMapInstance = ({ loadAmap, onSearchRestaurants, markEnabled = true }) => {
+const toCenterCoords = (center) => {
+  if (Array.isArray(center) && center.length === 2) return center;
+  if (center && typeof center.lng === 'number' && typeof center.lat === 'number') {
+    return [center.lng, center.lat];
+  }
+  if (center && typeof center.getLng === 'function' && typeof center.getLat === 'function') {
+    return [center.getLng(), center.getLat()];
+  }
+  return YUELU_CENTER;
+};
+
+export const useMapInstance = ({ loadAmap, onMoveEnd, markEnabled = true }) => {
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const moveTimerRef = useRef(null);
@@ -13,7 +24,10 @@ export const useMapInstance = ({ loadAmap, onSearchRestaurants, markEnabled = tr
   const [mapLoadAttempts, setMapLoadAttempts] = useState(0);
 
   const clearMoveTimer = useCallback(() => {
-    if (moveTimerRef.current) clearTimeout(moveTimerRef.current);
+    if (moveTimerRef.current) {
+      clearTimeout(moveTimerRef.current);
+      moveTimerRef.current = null;
+    }
   }, []);
 
   const focusPendingRestaurant = useCallback(() => {
@@ -23,6 +37,12 @@ export const useMapInstance = ({ loadAmap, onSearchRestaurants, markEnabled = tr
     mapInstance.setCenter(restaurant.coordinates);
     mapInstance.setZoom(17);
   }, []);
+
+  const emitMoveEnd = useCallback(() => {
+    const mapInstance = mapInstanceRef.current;
+    if (!mapInstance || typeof onMoveEnd !== 'function') return;
+    onMoveEnd(toCenterCoords(mapInstance.getCenter?.()));
+  }, [onMoveEnd]);
 
   const initMap = useCallback(async (createMarkers, restaurantsRef) => {
     if (!markEnabled || !mapRef.current || mapInstanceRef.current) return;
@@ -44,7 +64,7 @@ export const useMapInstance = ({ loadAmap, onSearchRestaurants, markEnabled = tr
       mapInstance.on('moveend', () => {
         clearMoveTimer();
         moveTimerRef.current = setTimeout(() => {
-          onSearchRestaurants();
+          emitMoveEnd();
         }, MOVE_SEARCH_DEBOUNCE_MS);
       });
 
@@ -54,15 +74,16 @@ export const useMapInstance = ({ loadAmap, onSearchRestaurants, markEnabled = tr
       if (restaurantsRef.current.length > 0) {
         createMarkers(restaurantsRef.current);
         focusPendingRestaurant();
+        emitMoveEnd();
       } else {
-        onSearchRestaurants(YUELU_CENTER);
+        emitMoveEnd();
       }
     } catch (error) {
       console.error('地图加载失败:', error);
       setMapError(true);
       setMapLoading(false);
     }
-  }, [clearMoveTimer, focusPendingRestaurant, loadAmap, markEnabled, onSearchRestaurants]);
+  }, [clearMoveTimer, emitMoveEnd, focusPendingRestaurant, loadAmap, markEnabled]);
 
   const destroyMap = useCallback((clearMarkers) => {
     clearMoveTimer();
@@ -74,7 +95,7 @@ export const useMapInstance = ({ loadAmap, onSearchRestaurants, markEnabled = tr
 
   const retryMapLoad = useCallback((createMarkers, restaurantsRef) => {
     if (mapLoadAttempts >= 3) return;
-    setMapLoadAttempts(prev => prev + 1);
+    setMapLoadAttempts((prev) => prev + 1);
     initMap(createMarkers, restaurantsRef);
   }, [initMap, mapLoadAttempts]);
 
@@ -98,6 +119,6 @@ export const useMapInstance = ({ loadAmap, onSearchRestaurants, markEnabled = tr
     destroyMap,
     retryMapLoad,
     locateCenter,
-    focusPendingRestaurant
+    focusPendingRestaurant,
   };
 };
